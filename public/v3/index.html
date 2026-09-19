@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>기술 실현성 판정 - SMART JEJU TRAVEL GUARDIAN</title>
+  <meta name="description" content="기존 제안서 16대 기능을 49개 구현 항목으로 분해해 가능(23)·조건부(15)·불가능(11)을 판정한 기술 실현성 검토 덱." />
+  <meta name="theme-color" content="#090d16" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="ko_KR" />
+  <meta property="og:title" content="기술 실현성 판정 - SMART JEJU TRAVEL GUARDIAN" />
+  <meta property="og:description" content="기존 제안서 16대 기능을 49개 구현 항목으로 분해해 가능(23)·조건부(15)·불가능(11)을 판정한 기술 실현성 검토 덱." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="기술 실현성 판정 - SMART JEJU TRAVEL GUARDIAN" />
+  <meta name="twitter:description" content="기존 제안서 16대 기능을 49개 구현 항목으로 분해해 가능(23)·조건부(15)·불가능(11)을 판정한 기술 실현성 검토 덱." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128300;</text></svg>" />
+  <style>
+    /* 기본 리셋 및 다크 테마 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    }
+    :root {
+      --bg-main: #090d16;
+      --bg-card: #111827;
+      --bg-card-hover: #172033;
+      --border-color: #1f2937;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --emerald: #10b981;
+      --cyan: #06b6d4;
+      --rose: #f43f5e;
+      --amber: #f59e0b;
+      --indigo: #6366f1;
+      --purple: #a855f7;
+    }
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+    }
+    header, footer, button, .nav-btn, .sim-btn, .badge {
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* 상단 헤더 */
+    header {
+      width: 100%;
+      padding: 13px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      background-color: rgba(9, 13, 22, 0.95);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13.5px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #cbd5e1;
+    }
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--emerald);
+      box-shadow: 0 0 12px var(--emerald);
+      animation: pulseAnim 2s infinite;
+    }
+    @keyframes pulseAnim {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .live-status-pill {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .progress-bar-bg {
+      width: 160px;
+      height: 6px;
+      background-color: #1e293b;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 5.5%;
+      background: linear-gradient(90deg, var(--emerald), var(--cyan));
+      transition: width 0.3s ease;
+    }
+    .slide-counter {
+      font-size: 12px;
+      font-family: monospace;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    /* 슬라이드 캔버스 */
+    main {
+      flex: 1;
+      max-width: 1160px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      min-height: calc(100vh - 140px);
+    }
+    .slide {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .slide.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 뱃지 및 타이포그래피 */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 13px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      align-self: flex-start;
+      gap: 6px;
+    }
+    .badge.red {
+      background: rgba(244, 63, 94, 0.12);
+      border-color: rgba(244, 63, 94, 0.3);
+      color: #fb7185;
+    }
+    .badge.amber {
+      background: rgba(245, 158, 11, 0.12);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: #fbbf24;
+    }
+    .badge.cyan {
+      background: rgba(6, 182, 212, 0.12);
+      border-color: rgba(6, 182, 212, 0.3);
+      color: #38bdf8;
+    }
+    .badge.indigo {
+      background: rgba(99, 102, 241, 0.12);
+      border-color: rgba(99, 102, 241, 0.3);
+      color: #818cf8;
+    }
+    .badge.purple {
+      background: rgba(168, 85, 247, 0.12);
+      border-color: rgba(168, 85, 247, 0.3);
+      color: #c084fc;
+    }
+    .center .badge {
+      align-self: center;
+    }
+    h1 {
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .gradient-text {
+      background: linear-gradient(90deg, #34d399, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    h2 {
+      font-size: 27px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+    p.desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+
+    /* 그리드 및 카드 디자인 */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 18px 20px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover {
+      border-color: #334155;
+      transform: translateY(-2px);
+    }
+    .card h3 {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card p {
+      font-size: 12.8px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .card-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    /* 아키텍처 매트릭스 */
+    .arch-matrix {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      width: 100%;
+    }
+    .arch-col {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .arch-col-header {
+      font-size: 12px;
+      font-weight: 800;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .arch-item {
+      background: #111827;
+      border: 1px solid #1f2937;
+      padding: 9px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.4;
+    }
+    .arch-item strong {
+      color: #fff;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* 프로세스 스텝 */
+    .step-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+    .step-box {
+      flex: 1;
+      background: var(--bg-card);
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+    .step-num {
+      font-size: 10.5px;
+      font-family: monospace;
+      color: #64748b;
+      margin-bottom: 5px;
+      display: block;
+    }
+    .arrow {
+      color: #475569;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    /* 시스템 구조도 전용 스타일 (슬라이드 13) */
+    .sys-arch-container {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      width: 100%;
+    }
+    .sys-arch-layer {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 11px 14px;
+      transition: border-color 0.2s;
+    }
+    .sys-arch-layer:hover {
+      border-color: #334155;
+    }
+    .sys-layer-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 7px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .sys-layer-sub {
+      font-size: 10.5px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+    .sys-node-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 8px;
+    }
+    .sys-node {
+      background: rgba(17, 24, 39, 0.9);
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .sys-node strong {
+      font-size: 11.8px;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .sys-node span {
+      font-size: 10.5px;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+    .sys-connector {
+      text-align: center;
+      font-size: 10px;
+      color: #64748b;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      margin: -3px 0;
+    }
+
+    /* OpenAPI 연동 스펙 콜아웃 */
+    .api-callout {
+      margin-top: 10px;
+      padding: 8px 10px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px dashed rgba(56, 189, 248, 0.4);
+      border-radius: 6px;
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.45;
+    }
+    .api-callout strong {
+      color: #38bdf8;
+      font-size: 11px;
+      display: inline-block;
+      margin-bottom: 2px;
+    }
+    .api-callout code {
+      font-family: monospace;
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.1);
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 10px;
+    }
+
+    /* UI 목업 */
+    .mockup {
+      background: #0f172a;
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(244, 63, 94, 0.08);
+    }
+    .mockup-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6.5px 0;
+      border-bottom: 1px solid #1e293b;
+      font-size: 12px;
+    }
+    .btn-emergency {
+      width: 100%;
+      padding: 12px;
+      margin-top: 14px;
+      background: #e11d48;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    .btn-emergency:hover {
+      background: #be123c;
+    }
+
+    /* 11번 슬라이드: 인터랙티브 콘솔 */
+    .sim-panel {
+      background: #0d1322;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 18px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .sim-box {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .sim-box-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 6px;
+    }
+    .siren-btn {
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .siren-btn.off {
+      background: linear-gradient(135deg, #e11d48, #be123c);
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4);
+    }
+    .siren-btn.on {
+      background: #334155;
+      color: #f87171;
+      border: 2px solid #ef4444;
+      animation: strobeBorder 0.6s infinite alternate;
+    }
+    @keyframes strobeBorder {
+      from { box-shadow: 0 0 10px #ef4444; border-color: #ef4444; }
+      to { box-shadow: 0 0 25px #3b82f6; border-color: #3b82f6; }
+    }
+    .screen-strobe {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      display: none;
+      opacity: 0.22;
+      animation: strobeFlash 0.3s infinite alternate;
+    }
+    @keyframes strobeFlash {
+      0% { background-color: #ff0033; }
+      100% { background-color: #0044ff; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .screen-strobe {
+        animation: none !important;
+        display: none !important;
+      }
+      .pulse-dot, .siren-btn.on {
+        animation: none !important;
+      }
+    }
+    .sim-btn {
+      padding: 8px 10px;
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sim-btn:hover {
+      background: #334155;
+      border-color: #64748b;
+    }
+    .sim-btn.danger:hover {
+      background: rgba(225, 29, 72, 0.2);
+      border-color: #f43f5e;
+      color: #fca5a5;
+    }
+    .sim-log {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-family: monospace;
+      font-size: 11px;
+      color: #a7f3d0;
+      max-height: 110px;
+      overflow-y: auto;
+      line-height: 1.55;
+    }
+    .quick-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      max-height: 130px;
+      overflow-y: auto;
+    }
+    .quick-item {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      padding: 7px 9px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+    }
+    .route-badge {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .route-badge:hover {
+      background: #10b981;
+      color: #000;
+    }
+
+    /* 테이블 스타일 (슬라이드 14, 17) */
+    .table-scroll {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 6px;
+      border-radius: 10px;
+    }
+    .table-scroll-hint {
+      display: none;
+      font-size: 11px;
+      color: #38bdf8;
+      margin-bottom: 6px;
+      align-items: center;
+      gap: 4px;
+    }
+    @media (max-width: 960px) {
+      .table-scroll-hint {
+        display: flex;
+      }
+    }
+    .spec-table {
+      width: 100%;
+      min-width: 680px;
+      border-collapse: collapse;
+      font-size: 12px;
+      background: #0f172a;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #1e293b;
+    }
+    .spec-table th, .spec-table td {
+      padding: 9px 12px;
+      text-align: left;
+      border-bottom: 1px solid #1e293b;
+    }
+    .spec-table th {
+      background: #111827;
+      color: #94a3b8;
+      font-weight: 700;
+      font-size: 11.5px;
+    }
+    .spec-table tr:hover {
+      background: rgba(255,255,255,0.02);
+    }
+    .tag-diff-high {
+      color: #f43f5e;
+      background: rgba(244,63,94,0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 10.5px;
+    }
+    .tag-diff-med {
+      color: #f59e0b;
+      background: rgba(245,158,11,0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 10.5px;
+    }
+    .tag-diff-low {
+      color: #10b981;
+      background: rgba(16,185,129,0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 10.5px;
+    }
+
+    /* 팝업 모달 */
+    .sim-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .sim-modal-content {
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 14px;
+      padding: 22px;
+      max-width: 440px;
+      width: 92%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    /* 인페이지 토스트 알림 컴포넌트 */
+    .toast-container {
+      position: fixed;
+      bottom: 74px;
+      right: 24px;
+      z-index: 1100;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 380px;
+      width: calc(100% - 48px);
+      pointer-events: none;
+    }
+    .toast {
+      background: rgba(17, 24, 39, 0.96);
+      border: 1px solid #334155;
+      border-left: 4px solid var(--emerald);
+      border-radius: 10px;
+      padding: 12px 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+      color: #f1f5f9;
+      font-size: 12px;
+      line-height: 1.5;
+      pointer-events: auto;
+      animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .toast.toast-danger {
+      border-left-color: var(--rose);
+    }
+    .toast.toast-warning {
+      border-left-color: var(--amber);
+    }
+    .toast.toast-info {
+      border-left-color: var(--cyan);
+    }
+    .toast-header {
+      font-weight: 700;
+      font-size: 12.5px;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .toast-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0 4px;
+    }
+    .toast-close:hover {
+      color: #fff;
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .toast.toast-fade-out {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.95);
+    }
+
+    /* 하단 컨트롤러 */
+    footer {
+      width: 100%;
+      padding: 12px 28px;
+      border-top: 1px solid var(--border-color);
+      background-color: rgba(9, 13, 22, 0.95);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      bottom: 0;
+      z-index: 100;
+    }
+    .key-tip {
+      font-size: 12px;
+      color: #64748b;
+    }
+    .btn-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    button.nav-btn {
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    button.nav-btn:active {
+      transform: scale(0.96);
+    }
+    .btn-first, .btn-prev {
+      background: #1e293b;
+      color: #cbd5e1;
+      border: 1px solid #334155;
+    }
+    .btn-first:hover:not(:disabled), .btn-prev:hover:not(:disabled) {
+      background: #334155;
+      color: #fff;
+    }
+    .btn-next {
+      background: var(--emerald);
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+    }
+    .btn-next:hover {
+      background: #059669;
+    }
+    .btn-full {
+      background: #1e293b;
+      color: #cbd5e1;
+      padding: 8px 12px;
+      border: 1px solid #334155;
+    }
+    .btn-full:hover {
+      background: #334155;
+    }
+    button:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    /* 반응형 */
+    @media (max-width: 960px) {
+      .grid-3, .arch-matrix, .sim-panel {
+        grid-template-columns: 1fr;
+      }
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .step-container {
+        flex-direction: column;
+      }
+      .arrow {
+        transform: rotate(90deg);
+      }
+      h1 { font-size: 30px; }
+      h2 { font-size: 22px; }
+    }
+
+    /* 인쇄 스타일 (PDF 제출 및 오프라인 문서 출력) */
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #0f172a !important;
+        user-select: auto !important;
+      }
+      header, footer, .screen-strobe, .sim-modal, #simSafetyWarning, .btn-emergency, .route-badge, .sim-btn, .siren-btn, .table-scroll-hint {
+        display: none !important;
+      }
+      main {
+        padding: 0 !important;
+        max-width: 100% !important;
+        min-height: auto !important;
+        display: block !important;
+      }
+      .slide {
+        display: block !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        padding: 36px 32px !important;
+        min-height: 95vh !important;
+        box-sizing: border-box !important;
+        border-bottom: 1px dashed #cbd5e1 !important;
+      }
+      .card, .arch-col, .arch-item, .step-box, .mockup, .sim-panel, .sim-box, .spec-table {
+        background: #f8fafc !important;
+        border-color: #cbd5e1 !important;
+        color: #0f172a !important;
+        box-shadow: none !important;
+      }
+      .card h3, .spec-table th, .arch-item strong, .sys-node strong {
+        color: #0f172a !important;
+      }
+      .card p, p.desc, .sys-node span, .arch-item {
+        color: #334155 !important;
+      }
+      .spec-table th {
+        background: #e2e8f0 !important;
+      }
+      .gradient-text {
+        background: none !important;
+        -webkit-text-fill-color: #059669 !important;
+        color: #059669 !important;
+      }
+      .badge {
+        border-color: #059669 !important;
+        color: #059669 !important;
+        background: #ecfdf5 !important;
+      }
+    }
+  
+    /* ===== 실현성 판정 덱 전용 컴포넌트 ===== */
+    .vsum { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; width:100%; }
+    .vsum-card { background:var(--bg-card); border:1px solid var(--border-color); border-top:3px solid;
+                 border-radius:14px; padding:20px; display:flex; flex-direction:column; gap:6px; }
+    .vsum-card .vnum { font-family:monospace; font-size:48px; font-weight:800; line-height:1; letter-spacing:-0.03em; }
+    .vsum-card .vlab { font-size:15px; font-weight:700; }
+    .vsum-card .vsub { font-size:12.5px; color:var(--text-muted); line-height:1.55; }
+    .v-ok  { border-top-color:var(--emerald); } .v-ok .vnum,  .v-ok .vlab  { color:#34d399; }
+    .v-cond{ border-top-color:var(--amber);   } .v-cond .vnum,.v-cond .vlab{ color:#fbbf24; }
+    .v-no  { border-top-color:var(--rose);    } .v-no .vnum,  .v-no .vlab  { color:#fb7185; }
+
+    .ratio-bar { display:flex; height:10px; width:100%; border-radius:9999px; overflow:hidden;
+                 background:#1e293b; margin-top:18px; }
+    .ratio-bar span { display:block; }
+
+    .jgrid { display:grid; grid-template-columns:1fr 1fr; gap:9px; width:100%; }
+    .jrow { display:grid; grid-template-columns:30px 1fr; gap:11px; background:#0f172a;
+            border:1px solid #1e293b; border-left:3px solid; border-radius:10px;
+            padding:10px 13px; align-items:start; }
+    .jrow.ok   { border-left-color:var(--emerald); }
+    .jrow.cond { border-left-color:var(--amber); }
+    .jrow.no   { border-left-color:var(--rose); }
+    .jrow .jid { font-family:monospace; font-size:11.5px; font-weight:700; color:#64748b; padding-top:1px; }
+    .jrow .jname { font-size:13px; font-weight:700; color:#f1f5f9; margin-bottom:3px; line-height:1.35; }
+    .jrow .jdesc { font-size:11.6px; color:var(--text-muted); line-height:1.5; }
+    .jrow .jdesc b { color:#cbd5e1; }
+    .jrow .jdesc code { font-family:monospace; font-size:.92em; color:#7dd3fc; background:rgba(56,189,248,.08);
+                        padding:0 4px; border-radius:3px; }
+    .jcond { font-size:10.5px; font-weight:800; margin-right:5px; letter-spacing:.02em; }
+    .cond .jcond { color:#fbbf24; } .no .jcond { color:#fb7185; }
+    .jswap { display:block; margin-top:5px; padding-top:5px; border-top:1px dashed #1e293b;
+             font-size:11.6px; color:#93c5fd; line-height:1.5; }
+    .jswap b { color:#38bdf8; font-weight:800; margin-right:5px; font-size:10.5px; letter-spacing:.04em; }
+    .jplat { font-family:monospace; font-size:9.5px; color:#64748b; border:1px solid #334155;
+             border-radius:3px; padding:1px 4px; margin-left:5px; vertical-align:1px; }
+
+    .corr-card { background:var(--bg-card); border:1px solid var(--border-color); border-radius:12px;
+                 padding:15px 17px; display:flex; flex-direction:column; gap:6px; }
+    .corr-card .ck { font-size:11px; font-weight:700; color:#64748b; letter-spacing:.06em; }
+    .corr-card .cv { display:flex; align-items:baseline; gap:8px; font-family:monospace; flex-wrap:wrap; }
+    .corr-card .old { font-size:13.5px; color:#64748b; text-decoration:line-through; }
+    .corr-card .arw { font-size:12px; color:#475569; }
+    .corr-card .new { font-size:17px; font-weight:800; color:#34d399; }
+    .corr-card .cd  { font-size:11.6px; color:var(--text-muted); line-height:1.5; }
+
+    .alarm-card { background:rgba(244,63,94,0.06); border:1px solid rgba(244,63,94,0.28);
+                  border-radius:12px; padding:16px 18px; display:flex; flex-direction:column; gap:7px; }
+    .alarm-card .ai { font-family:monospace; font-size:11px; font-weight:800; color:#fb7185;
+                      background:rgba(244,63,94,0.15); border-radius:4px; padding:2px 7px; align-self:flex-start; }
+    .alarm-card h3 { font-size:14.5px; font-weight:700; color:#fff; line-height:1.4; }
+    .alarm-card p  { font-size:12px; color:var(--text-muted); line-height:1.55; }
+    .alarm-card code { font-family:monospace; color:#7dd3fc; font-size:.93em; }
+
+    .scope-box { background:#0f172a; border:1px solid #1e293b; border-radius:12px; padding:18px 20px; }
+    .scope-box h3 { font-size:14px; font-weight:700; color:#f1f5f9; margin-bottom:10px; }
+    .scope-box ul { margin:0; padding-left:18px; display:grid; gap:5px; }
+    .scope-box li { font-size:12.5px; color:var(--text-muted); line-height:1.5; }
+
+    @media (max-width: 900px) {
+      .vsum { grid-template-columns:1fr; }
+      .jgrid { grid-template-columns:1fr; }
+    }
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="pulse-dot"></div>
+      <span>SMART JEJU TRAVEL GUARDIAN</span>
+      <span class="live-status-pill" style="background:rgba(6,182,212,.15); border-color:rgba(6,182,212,.3); color:#38bdf8;">&#9679; 기술 실현성 판정 v2 &mdash; 49개 항목</span>
+    </div>
+    <div class="header-actions">
+      <div class="progress-wrap">
+        <div class="progress-bar-bg"><div id="progressBar" class="progress-bar-fill"></div></div>
+        <span id="slideCounter" class="slide-counter">01 / 14</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="slide active center" style="text-align:center; max-width:900px;">
+      <div class="badge cyan">&#128300; 기술 실현성 판정 · 기관 협의 항목 제외</div>
+      <h1>기존 제안서의 16대 기능,<br><span class="gradient-text">실제로 만들 수 있는가</span></h1>
+      <p class="desc" style="font-size:15px; max-width:700px; margin:0 auto 26px;">
+        SMART JEJU TRAVEL GUARDIAN의 4대 영역 16대 안전체계를 실제 구현 단위 <strong style="color:#f1f5f9;">49개 항목</strong>으로 분해하고,
+        OS 정책 · 물리 한계 · API 가용성만을 기준으로 판정했습니다.
+      </p>
+      <div class="vsum" style="margin-bottom:20px;">
+        <div class="vsum-card v-ok"><span class="vnum">23</span><span class="vlab">가능</span></div>
+        <div class="vsum-card v-cond"><span class="vnum">15</span><span class="vlab">조건부 가능</span></div>
+        <div class="vsum-card v-no"><span class="vnum">11</span><span class="vlab">불가능</span></div>
+      </div>
+      <p class="desc" style="font-size:12.5px; color:#64748b; margin:0;">
+        판정 기준일 2026-09-20 &nbsp;·&nbsp; 원본 TECHNICAL_SPEC.md 441행 / README.md 169행 / 제안 덱 19슬라이드
+      </p>
+    </section>
+
+    <section class="slide">
+      <div class="badge">&#128202; 판정 요약</div>
+      <h2>49개 항목 중 23개는 지금 바로 만들 수 있습니다</h2>
+      <p class="desc">기관 협의가 전제되는 항목(119·112 연계, 지자체 MOU, 위치정보사업 신고)은 판정 대상에서 제외했습니다.
+        다만 Apple Critical Alerts와 Google Play 정책은 플랫폼이 배포를 직접 차단하므로 기술 제약과 동일하게 포함했습니다.</p>
+      <div class="vsum">
+        <div class="vsum-card v-ok"><span class="vnum">23</span><span class="vlab">가능</span>
+          <span class="vsub">제약 없이 구현 가능. <b style="color:#34d399;">이 23건만으로 서비스가 성립합니다.</b> 2단계 체크인, 일몰·만조 경보, 라스트 핑이 여기에 있습니다.</span></div>
+        <div class="vsum-card v-cond"><span class="vnum">15</span><span class="vlab">조건부 가능</span>
+          <span class="vsub">전제조건이 충족되는 범위에서만 동작합니다. 기대치를 하향 조정하고 조건을 문서에 명시해야 합니다.</span></div>
+        <div class="vsum-card v-no"><span class="vnum">11</span><span class="vlab">불가능</span>
+          <span class="vsub">OS·물리 한계 9건 + 플랫폼 정책 2건. <b style="color:#fb7185;">전부 대체 설계가 있습니다.</b> 기능을 포기하는 것이 아니라 방식을 바꿉니다.</span></div>
+      </div>
+      <div class="ratio-bar">
+        <span style="flex:23; background:var(--emerald);"></span>
+        <span style="flex:15; background:var(--amber);"></span>
+        <span style="flex:11; background:var(--rose);"></span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="badge red">&#9888;&#65039; 착수 전 반드시 수정</div>
+      <h2>원본 명세서가 &lsquo;가능&rsquo;으로 적었으나 실제로는 불가능한 3건</h2>
+      <p class="desc">개발 3~4개월차에 발견되면 해당 기능을 통째로 다시 설계해야 합니다. 가장 먼저 고쳐야 할 항목입니다.</p>
+      <div class="grid-3">
+        <div class="alarm-card">
+          <span class="ai">01</span>
+          <h3>전원키 5회 연타는 Android에서도 불가능합니다</h3>
+          <p>명세서는 <code>AccessibilityService</code>로 &lsquo;가능(우회)&rsquo;이라 적었지만, <code>KEYCODE_POWER</code>는 <code>PhoneWindowManager</code>가 앱 디스패치 이전에 선점합니다. 볼륨키만 수신됩니다.</p>
+          <p style="color:#fb7185;">&#8594; 덱 슬라이드 9의 &lsquo;전원버튼 5회&rsquo;를 볼륨키로 전면 교체</p>
+        </div>
+        <div class="alarm-card">
+          <span class="ai">02</span>
+          <h3>iOS 라스트 비콘은 페이로드가 나가지 않습니다</h3>
+          <p>백그라운드 전환 시 iOS가 Manufacturer Data와 Local Name을 광고 패킷에서 제거합니다. &lsquo;수색 드론이 스캔만으로 좌표·혈액형을 판독&rsquo;하는 시나리오는 iOS에서 성립하지 않습니다.</p>
+          <p style="color:#fb7185;">&#8594; Android 전용 기능으로 명시</p>
+        </div>
+        <div class="alarm-card">
+          <span class="ai">03</span>
+          <h3>&lsquo;스텔스&rsquo;라는 단어가 성립하지 않습니다</h3>
+          <p>마이크 사용 중에는 iOS 주황 점 · Android 초록 점 인디케이터가 OS 레벨에서 강제 표시되며 어떤 앱도 숨길 수 없습니다. 원본 문서 어디에도 언급되지 않은 사각지대입니다.</p>
+          <p style="color:#fb7185;">&#8594; &lsquo;들키지 않는 녹음&rsquo;으로 약속 불가</p>
+        </div>
+      </div>
+      <div class="api-callout" style="margin-top:18px; background:rgba(244,63,94,0.06); border:1px solid rgba(244,63,94,0.25); border-radius:10px; padding:13px 16px; font-size:12.5px; color:#fda4af;">
+        <strong>추가로 짚어야 할 설계 결함</strong> &nbsp;—&nbsp; BLE 비콘 페이로드에 혈액형·기저질환을 평문 브로드캐스팅하는 설계는 민감정보를 불특정 다수에게 무선 송출하는 것입니다. 비콘에는 회전식 익명 ID + 좌표만 싣고, 의료정보는 서버 조회 구조로 변경해야 합니다.
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="badge">&#9989; 가능 &nbsp;01 / 23</div>
+      <h2>제약 없이 구현 가능 &mdash; 사전 예방 · 모니터링</h2>
+      <p class="desc">공공 OpenAPI 연동과 백그라운드 위치 추적은 양 OS 공식 지원 경로만으로 완결됩니다. 외부 변수가 없습니다.</p>
+      <div class="jgrid"><div class="jrow ok"><div class="jid">01</div><div><div class="jname">기상특보 · 단기예보 수신<span class="jplat">서버</span></div><div class="jdesc">기상청 OpenAPI. 공개 REST, 인증키 발급만으로 즉시 사용.</div></div></div><div class="jrow ok"><div class="jid">02</div><div><div class="jname">일출 · 일몰 시각 산출<span class="jplat">서버</span></div><div class="jdesc">한국천문연구원 OpenAPI. 1일 1회 갱신으로 충분.</div></div></div><div class="jrow ok"><div class="jid">03</div><div><div class="jname">만조 · 간조 시각 산출<span class="jplat">서버</span></div><div class="jdesc">국립해양조사원 조석예보 API.</div></div></div><div class="jrow ok"><div class="jid">04</div><div><div class="jname">일몰 30분 전 하산 권고<span class="jplat">iOS·AOS</span></div><div class="jdesc">시각 계산 결과를 로컬 노티로 예약. 네트워크 없이도 발화.</div></div></div><div class="jrow ok"><div class="jid">05</div><div><div class="jname">만조 40분 전 해안 대피 경보<span class="jplat">iOS·AOS</span></div><div class="jdesc">동일 구조. 갯바위·해루질 구역 진입 이력과 결합.</div></div></div><div class="jrow ok"><div class="jid">06</div><div><div class="jname">5대 범죄 밀집도 표출<span class="jplat">서버</span></div><div class="jdesc">생활안전지도 WMS/WFS를 PostGIS로 적재. 월 1회 동기화.</div></div></div><div class="jrow ok"><div class="jid">07</div><div><div class="jname">여성안심귀갓길 폴리곤<span class="jplat">서버</span></div><div class="jdesc">동일 출처 공개 레이어. 아청법 리스크 없는 합법 데이터.</div></div></div><div class="jrow ok"><div class="jid">08</div><div><div class="jname">브레드크럼 궤적 기록<span class="jplat">iOS·AOS</span></div><div class="jdesc"><code>Foreground Service</code> / Always 권한. 양 OS 공식 지원 경로.</div></div></div><div class="jrow ok"><div class="jid">09</div><div><div class="jname">코스 이탈 자동 감지<span class="jplat">서버</span></div><div class="jdesc">OSRM 맵매칭 + 폴리라인 수직거리 판정. 전부 서버 연산.</div></div></div><div class="jrow ok"><div class="jid">10</div><div><div class="jname">2단계 체크인 (데드맨 스위치)<span class="jplat">iOS·AOS</span></div><div class="jdesc"><b>핵심 차별점. 판정상 불확실 요소가 한 건도 없습니다.</b> 백그라운드 위치만으로 완결.</div></div></div><div class="jrow ok"><div class="jid">11</div><div><div class="jname">라스트 핑 (두절 직전 좌표 박제)<span class="jplat">iOS·AOS</span></div><div class="jdesc"><code>NWPathMonitor</code> / <code>ConnectivityManager</code> 두절 감지 후 큐잉, 복구 시 지연 업로드.</div></div></div><div class="jrow ok"><div class="jid">12</div><div><div class="jname">배터리 3% 도달 감지<span class="jplat">iOS·AOS</span></div><div class="jdesc"><code>ACTION_BATTERY_CHANGED</code> / <code>UIDevice.batteryLevel</code>.</div></div></div><div class="jrow ok"><div class="jid">13</div><div><div class="jname">Android BLE 비콘 방출<span class="jplat">AOS</span></div><div class="jdesc"><code>BluetoothLeAdvertiser</code> + Manufacturer Data. 백그라운드에서도 페이로드 유지.</div></div></div></div>
+    </section>
+
+    <section class="slide">
+      <div class="badge">&#9989; 가능 &nbsp;02 / 23</div>
+      <h2>제약 없이 구현 가능 &mdash; 구난 · 위기 대응 · 커뮤니티</h2>
+      <p class="desc">119 신고는 시스템 연계가 아니라 <strong style="color:#34d399;">원클릭 전화 발신 + 좌표 대형 표출</strong>로 설계합니다. 실제 구조 현장에서 가장 잘 작동하며 기관 협의 없이 즉시 가능합니다.</p>
+      <div class="jgrid"><div class="jrow ok"><div class="jid">14</div><div><div class="jname">국가지점번호 변환 (WGS84→UTM-K)<span class="jplat">iOS·AOS</span></div><div class="jdesc">격자 수식 내장 연산. 외부 API 장애와 무관하게 오프라인 산출.</div></div></div><div class="jrow ok"><div class="jid">15</div><div><div class="jname">119 원클릭 전화 발신<span class="jplat">iOS·AOS</span></div><div class="jdesc"><code>tel:</code> URL 스킴. 사용자가 탭하는 구조면 양 OS 표준 동작.</div></div></div><div class="jrow ok"><div class="jid">16</div><div><div class="jname">좌표·국가지점번호 대형 표출<span class="jplat">iOS·AOS</span></div><div class="jdesc">구두 전달용 화면. 시스템 연계 없이 실제 구조 현장에서 가장 잘 작동.</div></div></div><div class="jrow ok"><div class="jid">17</div><div><div class="jname">보호자 카카오 알림톡<span class="jplat">서버</span></div><div class="jdesc">비즈메시지 상용 API. 템플릿 사전 승인만 필요.</div></div></div><div class="jrow ok"><div class="jid">18</div><div><div class="jname">안심포인트 검색<span class="jplat">서버</span></div><div class="jdesc">카카오 로컬 카테고리 검색. 오프라인 대비 사전 임베딩도 가능.</div></div></div><div class="jrow ok"><div class="jid">19</div><div><div class="jname">최단 도보 대피로 안내<span class="jplat">서버</span></div><div class="jdesc">카카오모빌리티 Directions.</div></div></div><div class="jrow ok"><div class="jid">20</div><div><div class="jname">응급실 가용병상 · AED 위치<span class="jplat">서버</span></div><div class="jdesc">국립중앙의료원 E-Gen OpenAPI. 5분 주기 캐시.</div></div></div><div class="jrow ok"><div class="jid">21</div><div><div class="jname">화면 스트로브 + 플래시 점멸<span class="jplat">iOS·AOS</span></div><div class="jdesc"><code>torchMode</code> / <code>CameraX</code>. 사이렌과 달리 볼륨 정책에 걸리지 않음.</div></div></div><div class="jrow ok"><div class="jid">22</div><div><div class="jname">피어 반경 1km 푸시 전파<span class="jplat">서버</span></div><div class="jdesc">Redis Geo + FCM/APNs. 기술적으로 문제없음.</div></div></div><div class="jrow ok"><div class="jid">23</div><div><div class="jname">다국어 TTS 구조 리포트<span class="jplat">iOS·AOS</span></div><div class="jdesc">시스템 TTS + 번역 API. 양 OS 내장 엔진으로 충분.</div></div></div></div>
+    </section>
+
+    <section class="slide">
+      <div class="badge amber">&#9888;&#65039; 조건부 가능 &nbsp;01 / 15</div>
+      <h2>전제조건이 충족될 때만 동작합니다</h2>
+      <p class="desc">각 항목 앞의 <span style="color:#fbbf24; font-weight:700;">노란 글씨</span>가 성립 조건입니다. 조건이 깨지면 기능이 동작하지 않으므로 제안서에 반드시 병기해야 합니다.</p>
+      <div class="jgrid"><div class="jrow cond"><div class="jid">24</div><div><div class="jname">지오펜스 다중 감시<span class="jplat">iOS</span></div><div class="jdesc"><span class="jcond">동적 교체 스케줄러 자체 구현 시</span><b>iOS는 앱당 region monitoring 20개 제한.</b> 위험구역 수백 개 중 근접 20개만 실시간 교체하는 로직 필요. 원본 명세서에 누락된 제약.</div></div></div><div class="jrow cond"><div class="jid">25</div><div><div class="jname">Android 백그라운드 장시간 생존<span class="jplat">AOS</span></div><div class="jdesc"><span class="jcond">제조사 배터리 최적화 예외 등록 시</span>삼성·샤오미·오포 최적화는 Foreground Service도 종료. &lsquo;3~5시간 비콘&rsquo;은 순정 기준치.</div></div></div><div class="jrow cond"><div class="jid">26</div><div><div class="jname">몰카 IR LED 점광원 탐지<span class="jplat">iOS·AOS</span></div><div class="jdesc"><span class="jcond">완전 소등 + 850nm 야간모드 작동 중</span><b>주류인 940nm 몰카는 전면 카메라로도 거의 보이지 않음.</b> 전면에도 약한 IR-Cut 존재.</div></div></div><div class="jrow cond"><div class="jid">27</div><div><div class="jname">몰카 재귀반사 광학 탐지<span class="jplat">iOS·AOS</span></div><div class="jdesc"><span class="jcond">플래시·렌즈 동축 ±5°, 거리 1m 이내</span>유리·금속 장식 오탐 다발. 단독 판정 근거가 아닌 <b>보조 수단</b>.</div></div></div><div class="jrow cond"><div class="jid">28</div><div><div class="jname">Wi-Fi IP카메라 포트 스캔<span class="jplat">AOS</span></div><div class="jdesc"><span class="jcond">AP Isolation이 꺼진 공유기에서만</span>RTSP(554)·ONVIF(3702) 병렬 스캔. Isolation 켜져 있으면 검출율 0%.</div></div></div><div class="jrow cond"><div class="jid">29</div><div><div class="jname">Wi-Fi 포트 스캔 (iOS)<span class="jplat">iOS</span></div><div class="jdesc"><span class="jcond">로컬 네트워크 권한 + 심사 통과 시</span><code>NSLocalNetworkUsageDescription</code> 필수. <b>App Store 심사 반려가 잦음.</b></div></div></div><div class="jrow cond"><div class="jid">30</div><div><div class="jname">Android 볼륨키 연타 SOS<span class="jplat">AOS</span></div><div class="jdesc"><span class="jcond">미디어 세션 활성 유지 시</span><code>MediaSession</code>으로 수신 가능. <code>AccessibilityService</code> 사용은 <b>Play 정책 위반, 앱 삭제 대상</b>.</div></div></div><div class="jrow cond"><div class="jid">31</div><div><div class="jname">iOS 뒷면 탭(Back Tap) SOS<span class="jplat">iOS</span></div><div class="jdesc"><span class="jcond">사용자가 직접 단축어 연결 시</span>앱이 자동 설정할 수 없어 설정 앱에서 수동 연결 필요. 온보딩 이탈률 고려.</div></div></div></div>
+    </section>
+
+    <section class="slide">
+      <div class="badge amber">&#9888;&#65039; 조건부 가능 &nbsp;02 / 15</div>
+      <h2>승인 · 밀도 · 거치 상태에 의존하는 항목</h2>
+      <p class="desc">특히 <strong style="color:#fbbf24;">34번 Critical Alerts</strong>는 승인 실패 시 iOS 사이렌 기능 전체가 무력화되는데, 현재 로드맵은 이를 마지막 달에 배치해 복구 시간이 없습니다.</p>
+      <div class="jgrid"><div class="jrow cond"><div class="jid">32</div><div><div class="jname">iOS 백그라운드 30초 녹음<span class="jplat">iOS</span></div><div class="jdesc"><span class="jcond">audio 백그라운드 모드 + 심사 통과 시</span>동작은 하나 심사가 까다로움. 녹음 인디케이터는 별도 문제(47번).</div></div></div><div class="jrow cond"><div class="jid">33</div><div><div class="jname">iOS 무음 스위치 무시 재생<span class="jplat">iOS</span></div><div class="jdesc"><span class="jcond">playback 카테고리 설정 시</span><b>무음 스위치 무시는 일반 앱도 가능.</b> 단 볼륨은 사용자 설정값을 그대로 따름.</div></div></div><div class="jrow cond"><div class="jid">34</div><div><div class="jname">iOS 무음·집중모드 돌파 알림<span class="jplat">iOS</span></div><div class="jdesc"><span class="jcond">Apple Critical Alerts 승인 시</span>승인 보장 없고 수개월 소요. <b>M1에 즉시 신청</b>하고 미승인 Plan B 명문화 필요. 현재 M6 배치는 복구 시간 없음.</div></div></div><div class="jrow cond"><div class="jid">35</div><div><div class="jname">20kHz 고주파 방출<span class="jplat">iOS·AOS</span></div><div class="jdesc"><span class="jcond">48kHz 샘플레이트 사용 시 재생만</span>재생은 되나 음압이 40dB 이하로 급감해 <b>야외 실효성 없음</b>.</div></div></div><div class="jrow cond"><div class="jid">36</div><div><div class="jname">렌터카 전복 · 충격 감지<span class="jplat">iOS·AOS</span></div><div class="jdesc"><span class="jcond">거치대에 고정된 경우에 한해</span>가속도계 범위(±16G)는 충분. 주머니·가방이면 차체 거동과 분리되어 오탐·미탐.</div></div></div><div class="jrow cond"><div class="jid">37</div><div><div class="jname">고정밀 GPS 승격 유지<span class="jplat">iOS·AOS</span></div><div class="jdesc"><span class="jcond">평시/경계 모드 분리 설계 시</span>경계 모드 시간당 10~20% 소모. 원본 &lsquo;24시간 15% 미만&rsquo; KPI와 양립 불가.</div></div></div><div class="jrow cond"><div class="jid">38</div><div><div class="jname">P2P 멀티홉 메시<span class="jplat">AOS·iOS</span></div><div class="jdesc"><span class="jcond">자체 라우팅 구현 + 사용자 밀도 확보 시</span><b>Nearby Connections는 멀티홉 라우팅을 제공하지 않음.</b> 곶자왈 실효 반경 25~45m 내 동일 앱 사용자 필요. 원본 4MM으로는 불가능.</div></div></div></div>
+    </section>
+
+    <section class="slide">
+      <div class="badge red">&#10060; 불가능 &nbsp;01 / 11</div>
+      <h2>OS · 물리 한계로 구현할 수 없는 항목</h2>
+      <p class="desc">기능을 포기하는 것이 아니라 <strong style="color:#38bdf8;">방식을 바꿉니다.</strong> 각 항목의 파란 줄이 대체 설계입니다.</p>
+      <div class="jgrid"><div class="jrow no"><div class="jid">39</div><div><div class="jname">전원키 5회 연타 감지<span class="jplat">iOS·AOS</span></div><div class="jdesc"><span class="jcond">OS 원천 차단 · 양 OS 공통</span><code>KEYCODE_POWER</code>는 <code>PhoneWindowManager</code>가 선점. <b>명세서의 &lsquo;Android 가능&rsquo; 표기는 오류.</b> 기본 긴급 SOS와도 충돌.<span class="jswap"><b>대체</b>볼륨키 연타(30) · Back Tap(31) · 워치 버튼 · 퀵설정 타일 · 잠금화면 위젯</span></div></div></div><div class="jrow no"><div class="jid">40</div><div><div class="jname">iOS 백그라운드 Manufacturer Data 광고<span class="jplat">iOS</span></div><div class="jdesc"><span class="jcond">OS가 광고 패킷에서 제거</span>백그라운드 전환 시 Manufacturer Data·Local Name 제거, Service UUID만 overflow 영역. 백그라운드 iBeacon 광고도 원천 불가.<span class="jswap"><b>대체</b>라스트 비콘을 Android 전용으로 명시 · iOS는 라스트 핑(11) + 외장 BLE 태그</span></div></div></div><div class="jrow no"><div class="jid">41</div><div><div class="jname">앱의 전원 셧다운 개입<span class="jplat">iOS·AOS</span></div><div class="jdesc"><span class="jcond">권한 자체가 존재하지 않음</span>배터리 0% 셧다운을 앱이 지연·방어할 수 없음. iOS는 저전력 시 SIGKILL. &lsquo;전원 꺼진 후 찾기&rsquo;는 Apple 전용 경로.<span class="jswap"><b>대체</b>3% 시점에 마지막 좌표를 서버·플래시에 동결하는 것까지만 설계</span></div></div></div><div class="jrow no"><div class="jid">42</div><div><div class="jname">LiDAR 1~2mm 핀홀 검출<span class="jplat">iOS</span></div><div class="jdesc"><span class="jcond">물리 해상도 한계</span>iPhone LiDAR는 576포인트 희소 뎁스맵으로 유효 해상도 <b>수 cm급</b>.<span class="jswap"><b>대체</b>삭제하고 광학 재귀반사(27)로 일원화</span></div></div></div><div class="jrow no"><div class="jid">43</div><div><div class="jname">25kHz 초음파 방출<span class="jplat">iOS·AOS</span></div><div class="jdesc"><span class="jcond">나이퀴스트 한계 초과</span>44.1kHz의 재생 한계는 22.05kHz. 48kHz로 올려도 마이크로 스피커 물리 한계.<span class="jswap"><b>대체</b>맹수 포효음(가청 2~4kHz) + 스트로브 플래시(21) 복합 방어</span></div></div></div><div class="jrow no"><div class="jid">44</div><div><div class="jname">120dB 음압 사이렌<span class="jplat">iOS·AOS</span></div><div class="jdesc"><span class="jcond">스피커 물리 출력 한계</span>폰 스피커 최대 SPL은 1m 기준 <b>약 85dB</b>. 120dB는 제트엔진 근접 수준. 원본 6개 위치에 표기됨.<span class="jswap"><b>대체</b>수치를 삭제하고 &lsquo;최대 음량 경보음&rsquo;으로 표기</span></div></div></div></div>
+    </section>
+
+    <section class="slide">
+      <div class="badge red">&#10060; 불가능 &nbsp;02 / 11</div>
+      <h2>플랫폼 정책이 배포를 차단하는 항목 포함</h2>
+      <p class="desc">48 · 49번은 기술이 아니라 App Store / Play 심사 정책에 걸리는 항목입니다. 구현해도 배포되지 않으므로 기술 제약과 동일하게 취급했습니다.</p>
+      <div class="jgrid"><div class="jrow no"><div class="jid">45</div><div><div class="jname">시스템 볼륨 강제 100% (iOS)<span class="jplat">iOS</span></div><div class="jdesc"><span class="jcond">해당 API 미제공</span>iOS는 앱이 시스템 출력 볼륨을 변경하는 API를 제공하지 않음. Android만 <code>setStreamVolume</code> 가능.<span class="jswap"><b>대체</b>iOS는 Critical Alerts(34) 또는 스트로브 중심으로 전환</span></div></div></div><div class="jrow no"><div class="jid">46</div><div><div class="jname">MAC 주소 · ARP 테이블 조회<span class="jplat">iOS·AOS</span></div><div class="jdesc"><span class="jcond">커널 접근 차단 (Android 10+ 포함)</span>제조사 OUI로 카메라를 식별하는 경로가 양 OS 모두 차단. 원본도 이 한계는 인정.<span class="jswap"><b>대체</b>HTTP/RTSP 배너 문자열 정규식 매칭으로만 제조사 추정</span></div></div></div><div class="jrow no"><div class="jid">47</div><div><div class="jname">완전 무흔적 스텔스 녹음<span class="jplat">iOS·AOS</span></div><div class="jdesc"><span class="jcond">OS 강제 인디케이터</span><b>iOS 주황 점 · Android 초록 점이 OS 레벨에서 강제 표시</b>되며 앱이 숨길 수 없음. 원본 문서에 한 번도 언급되지 않은 사각지대.<span class="jswap"><b>대체</b>&lsquo;은밀 녹음&rsquo;이 아니라 <b>&lsquo;화면 조작 없이 시작되는 녹음&rsquo;</b>으로 기능 정의·문구 재작성</span></div></div></div><div class="jrow no"><div class="jid">48</div><div><div class="jname">CallKit 기반 가짜 통화<span class="jplat">iOS</span></div><div class="jdesc"><span class="jcond">플랫폼 정책 — 심사 반려</span>CallKit은 실제 VoIP 통화용. 가짜 통화 연출에 쓰면 App Store 반려. 구조도 2곳에 표기됨.<span class="jswap"><b>대체</b>CallKit 제거 후 자체 통화 UI로 구현하면 기능 자체는 정상 동작</span></div></div></div><div class="jrow no"><div class="jid">49</div><div><div class="jname">사용자 조작 없는 자동 전화 발신<span class="jplat">iOS·AOS</span></div><div class="jdesc"><span class="jcond">플랫폼 정책 — iOS 원천 불가</span>iOS는 API 없음. Android는 <code>CALL_PHONE</code>으로 가능하나 Play 정책상 사실상 차단. 자동 e-Call이 여기 해당.<span class="jswap"><b>대체</b>카운트다운 후 <b>사용자가 탭</b>하는 구조로 전환 (미해제 시 보호자 알림톡 자동 발송)</span></div></div></div></div>
+    </section>
+
+    <section class="slide">
+      <div class="badge cyan">&#128203; 원본 대비</div>
+      <h2>16대 기능 최종 판정</h2>
+      <p class="desc">&lsquo;분리&rsquo;는 하나의 기능 안에서 OS별 또는 하위 기능별로 판정이 갈리는 경우입니다. 완전 가능 8개 · 부분/조건부 6개 · 재설계 필요 2개.</p>
+      <div class="table-scroll" style="overflow-x:auto; width:100%;">
+        <table class="spec-table">
+          <thead><tr><th style="width:44px;">#</th><th style="width:210px;">원본 기능</th><th style="width:88px;">판정</th><th>조치</th></tr></thead>
+          <tbody><tr><td style="font-family:monospace;color:#64748b;">01</td><td style="font-weight:700;color:#f1f5f9;">공공기관 데이터 연동</td><td><span class="tag-diff-low">가능</span></td><td style="color:#94a3b8;">그대로 진행</td></tr><tr><td style="font-family:monospace;color:#64748b;">02</td><td style="font-weight:700;color:#f1f5f9;">범죄 발생지역 지오펜싱</td><td><span class="tag-diff-med">조건부</span></td><td style="color:#94a3b8;">iOS region 20개 제한 대응 필요</td></tr><tr><td style="font-family:monospace;color:#64748b;">03</td><td style="font-weight:700;color:#f1f5f9;">여성안심귀갓길</td><td><span class="tag-diff-med">조건부</span></td><td style="color:#94a3b8;">동일 — 동적 교체 스케줄러</td></tr><tr><td style="font-family:monospace;color:#64748b;">04</td><td style="font-weight:700;color:#f1f5f9;">숙소 불법촬영 탐지</td><td><span class="tag-diff-med">조건부</span></td><td style="color:#94a3b8;">LiDAR 삭제, 검출율 기대치 하향</td></tr><tr><td style="font-family:monospace;color:#64748b;">05</td><td style="font-weight:700;color:#f1f5f9;">실시간 궤적추적</td><td><span class="tag-diff-low">가능</span></td><td style="color:#94a3b8;">그대로 진행</td></tr><tr><td style="font-family:monospace;color:#64748b;">06</td><td style="font-weight:700;color:#f1f5f9;">2단계 체크인</td><td><span class="tag-diff-low">가능</span></td><td style="color:#94a3b8;">핵심 차별점 — 최우선 개발</td></tr><tr><td style="font-family:monospace;color:#64748b;">07</td><td style="font-weight:700;color:#f1f5f9;">라스트 핑 &amp; 비콘</td><td><span class="tag-diff-med">분리</span></td><td style="color:#94a3b8;">라스트 핑 가능 / 비콘은 Android 전용</td></tr><tr><td style="font-family:monospace;color:#64748b;">08</td><td style="font-weight:700;color:#f1f5f9;">야생동물 기피 주파수</td><td><span class="tag-diff-high">불가</span></td><td style="color:#94a3b8;">포효음 + 스트로브로 전면 교체</td></tr><tr><td style="font-family:monospace;color:#64748b;">09</td><td style="font-weight:700;color:#f1f5f9;">스텔스 무음 SOS</td><td><span class="tag-diff-high">불가</span></td><td style="color:#94a3b8;">전원키→볼륨키, &lsquo;무흔적&rsquo;→&lsquo;무조작&rsquo;</td></tr><tr><td style="font-family:monospace;color:#64748b;">10</td><td style="font-weight:700;color:#f1f5f9;">AI 가짜 통화</td><td><span class="tag-diff-low">가능</span></td><td style="color:#94a3b8;">CallKit만 제거</td></tr><tr><td style="font-family:monospace;color:#64748b;">11</td><td style="font-weight:700;color:#f1f5f9;">강제 최대볼륨 사이렌</td><td><span class="tag-diff-med">분리</span></td><td style="color:#94a3b8;">Android 가능 / iOS는 Critical Alerts 의존</td></tr><tr><td style="font-family:monospace;color:#64748b;">12</td><td style="font-weight:700;color:#f1f5f9;">안심포인트 &amp; 대피로</td><td><span class="tag-diff-low">가능</span></td><td style="color:#94a3b8;">그대로 진행</td></tr><tr><td style="font-family:monospace;color:#64748b;">13</td><td style="font-weight:700;color:#f1f5f9;">병원 · 응급의료 안내</td><td><span class="tag-diff-low">가능</span></td><td style="color:#94a3b8;">그대로 진행</td></tr><tr><td style="font-family:monospace;color:#64748b;">14</td><td style="font-weight:700;color:#f1f5f9;">피어 SOS</td><td><span class="tag-diff-low">가능</span></td><td style="color:#94a3b8;">기술 문제없음 (수신 범위 설계는 별도)</td></tr><tr><td style="font-family:monospace;color:#64748b;">15</td><td style="font-weight:700;color:#f1f5f9;">모빌리티 세이프티</td><td><span class="tag-diff-med">분리</span></td><td style="color:#94a3b8;">경로이탈 가능 / 전복 조건부 / 자동 e-Call 불가</td></tr><tr><td style="font-family:monospace;color:#64748b;">16</td><td style="font-weight:700;color:#f1f5f9;">동행 매칭 &amp; 다국어 TTS</td><td><span class="tag-diff-low">가능</span></td><td style="color:#94a3b8;">기술 문제없음 (안전 설계 선행)</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="badge amber">&#128176; 수치 재산정</div>
+      <h2>근거가 성립하지 않거나 내부 모순이 있는 산정치</h2>
+      <p class="desc">심사에서 가장 먼저 지적받을 숫자들입니다. 특히 공수표는 &lsquo;10명 × 6개월&rsquo;이라 적어놓고 합계를 32MM으로 표기해 자체 모순입니다.</p>
+      <div class="grid-3" style="gap:13px;"><div class="corr-card"><span class="ck">총 투입 공수</span><span class="cv"><span class="old">32 MM</span><span class="arw">&#8594;</span><span class="new">55~65 MM</span></span><span class="cd">표에 10명 × 6개월로 적혀 있으나 단순 계산은 60MM. 필드테스트·보안진단·PIA·스토어 심사 대응이 누락.</span></div><div class="corr-card"><span class="ck">개발 기간</span><span class="cv"><span class="old">6개월</span><span class="arw">&#8594;</span><span class="new">12~14개월</span></span><span class="cd">Critical Alerts 심사와 계절별 산악 필드테스트가 직렬로 놓임. 현재 로드맵은 심사를 M6에 배치.</span></div><div class="corr-card"><span class="ck">월 인프라비 (MAU 1만)</span><span class="cv"><span class="old">210만원</span><span class="arw">&#8594;</span><span class="new">40~60만원</span></span><span class="cd">MAU 1만은 동시접속 수백 명. Kafka·EKS 6노드·Aurora 다중AZ는 MAU 100만급 설계.</span></div><div class="corr-card"><span class="ck">관제 인건비 (24/365)</span><span class="cv"><span class="old">350만원</span><span class="arw">&#8594;</span><span class="new">3,000만원+</span></span><span class="cd">주야 2명 상시 배치는 교대·휴가 포함 실제 8~10명. 무인 자동화 + 온콜 전환 시 TCO 1/3.</span></div><div class="corr-card"><span class="ck">배터리 KPI</span><span class="cv"><span class="old">시간당 0.8%</span><span class="arw">&#8594;</span><span class="new">모드별 분리</span></span><span class="cd">0.8% × 24시간 = 19.2%로 &lsquo;24시간 15% 미만&rsquo;과 모순. 평시/경계 모드 KPI 분리 필요.</span></div><div class="corr-card"><span class="ck">몰카 검출율</span><span class="cv"><span class="old">75~85%</span><span class="arw">&#8594;</span><span class="new">수치 삭제</span></span><span class="cd">근거 데이터 없음. &lsquo;전문 탐지장비를 대체하지 않는 보조 점검 도구&rsquo;로 표기해야 사후 책임 방어.</span></div></div>
+    </section>
+
+    <section class="slide">
+      <div class="badge">&#128640; 재정의된 로드맵</div>
+      <h2>확실한 것부터 완성하는 순서</h2>
+      <p class="desc">16개 기능을 6개월에 전부 넣는 계획은 실패합니다. 판정 결과를 그대로 단계에 대응시켰습니다.</p>
+      <div class="grid-3">
+        <div class="arch-col" style="border-top:3px solid var(--emerald);">
+          <div class="arch-col-header" style="color:#34d399; display:flex; justify-content:space-between;">
+            <span>PHASE 1</span><span style="font-family:monospace; color:#64748b; font-weight:600;">6개월 · 20MM</span></div>
+          <div style="font-size:14px; font-weight:700; color:#fff; margin-bottom:2px;">전원 &lsquo;가능&rsquo; 판정만으로 구성</div>
+          <div style="font-size:11.5px; color:#64748b; margin-bottom:6px;">불확실 요소가 한 건도 없으면서, 경쟁 서비스에는 없는 것들입니다.</div>
+          <div class="arch-item">2단계 체크인 데드맨 스위치</div>
+          <div class="arch-item">일몰 30분 전 · 만조 40분 전 경보</div>
+          <div class="arch-item">브레드크럼 궤적 + 라스트 핑</div>
+          <div class="arch-item">국가지점번호 + 119 원클릭 전화</div>
+          <div class="arch-item">보호자 카카오 알림톡</div>
+          <div class="arch-item">안심포인트 · 응급실 · AED</div>
+        </div>
+        <div class="arch-col" style="border-top:3px solid var(--amber);">
+          <div class="arch-col-header" style="color:#fbbf24; display:flex; justify-content:space-between;">
+            <span>PHASE 2</span><span style="font-family:monospace; color:#64748b; font-weight:600;">+6개월 · 25MM</span></div>
+          <div style="font-size:14px; font-weight:700; color:#fff; margin-bottom:2px;">조건부 항목을 검증하며 투입</div>
+          <div style="font-size:11.5px; color:#64748b; margin-bottom:6px;">각 항목의 전제조건을 실측으로 확인한 뒤 확정합니다.</div>
+          <div class="arch-item">볼륨키 스텔스 SOS <em style="color:#64748b;">(전원키 아님)</em></div>
+          <div class="arch-item">사이렌 &mdash; Android 우선, iOS Plan B 병행</div>
+          <div class="arch-item">택시 경로이탈 감지</div>
+          <div class="arch-item">동적 지오펜스 20개 교체 스케줄러</div>
+          <div class="arch-item">웹 통합 관제탑</div>
+        </div>
+        <div class="arch-col" style="border-top:3px solid #475569;">
+          <div class="arch-col-header" style="color:#94a3b8; display:flex; justify-content:space-between;">
+            <span>PHASE 3</span><span style="font-family:monospace; color:#64748b; font-weight:600;">별도 사업 · R&amp;D</span></div>
+          <div style="font-size:14px; font-weight:700; color:#fff; margin-bottom:2px;">본 사업에서 분리</div>
+          <div style="font-size:11.5px; color:#64748b; margin-bottom:6px;">기간·예산·성공 조건이 본 개발과 성격이 다른 항목입니다.</div>
+          <div class="arch-item">119 · 112 시스템 연계 <em style="color:#64748b;">(기관 협의)</em></div>
+          <div class="arch-item">P2P 멀티홉 메시 <em style="color:#64748b;">(자체 라우팅)</em></div>
+          <div class="arch-item">숙소 불법촬영 탐지 고도화</div>
+          <div class="arch-item">동행 매칭 <em style="color:#64748b;">(안전 설계 선행)</em></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="badge indigo">&#128207; 판정 범위</div>
+      <h2>이 판정이 다루지 않는 것</h2>
+      <p class="desc">본 문서는 <strong style="color:#f1f5f9;">순수 기술 실현성</strong>만을 기준으로 합니다. 아래는 기술이 아니라 협의·행정의 문제이므로 가능/불가능 판정을 내리지 않았습니다.</p>
+      <div class="grid-2">
+        <div class="scope-box">
+          <h3 style="color:#94a3b8;">&#9898; 판정 대상에서 제외</h3>
+          <ul>
+            <li>소방청 119 종합상황실 · 경찰청 112 시스템 연계 협약</li>
+            <li>제주특별자치도 · 소방안전본부 MOU 및 시범사업 지정</li>
+            <li>방송통신위원회 위치기반서비스사업 신고</li>
+            <li>개인정보 영향평가(PIA) 및 위치정보 관리책임자 지정</li>
+          </ul>
+        </div>
+        <div class="scope-box" style="border-color:rgba(56,189,248,.3);">
+          <h3 style="color:#38bdf8;">&#9679; 기술 제약과 동일하게 포함</h3>
+          <ul>
+            <li>Apple Critical Alerts Entitlement 심사 &mdash; 미승인 시 iOS 사이렌 무력화</li>
+            <li>Google Play Accessibility API 정책 &mdash; 위반 시 앱 삭제</li>
+            <li>App Store 로컬 네트워크 스캐너 심사 &mdash; 반려 빈발</li>
+            <li>CallKit 용도 외 사용 심사 &mdash; 반려 사유</li>
+          </ul>
+          <p style="font-size:11.5px; color:#64748b; margin-top:8px; line-height:1.5;">플랫폼이 배포 자체를 차단하는 요소이므로 기술 제약으로 취급했습니다.</p>
+        </div>
+      </div>
+      <div class="api-callout" style="margin-top:16px; background:rgba(99,102,241,0.07); border:1px solid rgba(99,102,241,0.25); border-radius:10px; padding:13px 16px; font-size:12.5px; color:#a5b4fc;">
+        <strong>원본 제안서에서 잘 검토된 부분</strong> &nbsp;—&nbsp; 아청법 제55조 리스크를 기획 단계에서 원천 배제하고 생활안전지도 통계로 전환한 판단, 통신비밀보호법 대화 일방 당사자 녹음 법리, 생성형 AI를 구난 경로에서 배제한 Safety Boundary는 모두 정확합니다. 그대로 유지합니다.
+      </div>
+    </section>
+
+    <section class="slide center" style="text-align:center; max-width:920px;">
+      <div class="badge">&#127919; 결론</div>
+      <h1 style="font-size:34px;">기능을 줄이는 것이 아니라<br><span class="gradient-text">확실한 것부터 완성하는 것</span></h1>
+      <p class="desc" style="font-size:14.5px; max-width:720px; margin:0 auto 26px;">
+        2단계 체크인 &#43; 일몰·만조 사전경보 &#43; 라스트 핑 &#43; 국가지점번호 표출 조합은
+        전부 &lsquo;가능&rsquo; 판정이면서 동시에 경쟁 서비스에 없는 것들입니다.
+        불가능·조건부 항목을 전부 Phase 2 이후로 미뤄도 제품 가치는 훼손되지 않습니다.
+      </p>
+      <div class="grid-3" style="margin-bottom:22px;">
+        <div class="card" style="border-color:rgba(16,185,129,.3);">
+          <div class="card-tag">지금 시작</div>
+          <h3 style="justify-content:center;">23건</h3>
+          <p style="text-align:center;">Phase 1 &mdash; 불확실 요소 0건</p>
+        </div>
+        <div class="card" style="border-color:rgba(245,158,11,.3);">
+          <div class="card-tag" style="background:rgba(245,158,11,.15); color:#fbbf24;">조건 확인 후</div>
+          <h3 style="justify-content:center;">15건</h3>
+          <p style="text-align:center;">Phase 2 &mdash; 전제조건 실측 선행</p>
+        </div>
+        <div class="card" style="border-color:rgba(244,63,94,.3);">
+          <div class="card-tag" style="background:rgba(244,63,94,.15); color:#fb7185;">설계 변경</div>
+          <h3 style="justify-content:center;">11건</h3>
+          <p style="text-align:center;">전부 대체 설계 확보</p>
+        </div>
+      </div>
+      <p class="desc" style="font-size:12.5px; color:#64748b; margin:0;">
+        본 판정은 기존 제안서를 대체하지 않습니다. 기존 19슬라이드 제안 덱은 원본 그대로 유지되며, 본 문서는 그 위에 겹쳐 읽는 기술 검토본입니다.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="key-tip">단축키: [&#8592;] [&#8594;] 또는 [Space] | [Home] 처음으로 | 총 14개 슬라이드 · 기존 제안 덱은 <a href="/" style="color:#38bdf8;">여기</a></div>
+    <div class="btn-group">
+      <button id="firstBtn" class="nav-btn btn-first" onclick="goToFirst()">처음으로</button>
+      <button id="prevBtn" class="nav-btn btn-prev" onclick="prev()">이전</button>
+      <button id="nextBtn" class="nav-btn btn-next" onclick="next()">다음</button>
+      <button id="fullBtn" class="nav-btn btn-full" onclick="toggleFullScreen()">&#9134; 전체화면</button>
+    </div>
+  </footer>
+
+  <script>
+    let slides, current = 0, total = 0;
+    let firstBtn, prevBtn, nextBtn, counter, progBar;
+
+    function getSlideFromHash() {
+      const m = window.location.hash.match(/^#\/(\d+)$/);
+      if (m) { const n = parseInt(m[1], 10); if (n >= 1 && n <= total) return n - 1; }
+      return 0;
+    }
+
+    function render(idx, updateHistory = true) {
+      if (!slides || slides.length === 0) return;
+      current = Math.max(0, Math.min(idx, total - 1));
+      slides.forEach((s, i) => {
+        const isActive = (i === current);
+        s.classList.toggle('active', isActive);
+        s.setAttribute('aria-hidden', !isActive);
+        if (!isActive) { s.setAttribute('inert', ''); } else { s.removeAttribute('inert'); }
+      });
+      if (counter) counter.textContent = `${String(current + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+      if (progBar) progBar.style.width = `${((current + 1) / total) * 100}%`;
+      if (firstBtn) firstBtn.disabled = (current === 0);
+      if (prevBtn) prevBtn.disabled = (current === 0);
+      if (nextBtn) nextBtn.textContent = (current === total - 1) ? '처음으로' : '다음';
+      if (updateHistory) history.replaceState(null, '', `#/${current + 1}`);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function next() { if (total === 0) return; current = (current + 1) % total; render(current); }
+    function prev() { if (total === 0) return; if (current > 0) { current--; render(current); } }
+    function goToFirst() { render(0); }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(() => {}); }
+      else { document.exitFullscreen().catch(() => {}); }
+    }
+
+    function initSlides() {
+      slides = document.querySelectorAll('.slide');
+      firstBtn = document.getElementById('firstBtn');
+      prevBtn = document.getElementById('prevBtn');
+      nextBtn = document.getElementById('nextBtn');
+      counter = document.getElementById('slideCounter');
+      progBar = document.getElementById('progressBar');
+      total = slides.length;
+      const i = getSlideFromHash();
+      render(i, false);
+      history.replaceState(null, '', `#/${i + 1}`);
+    }
+
+    window.addEventListener('hashchange', () => {
+      const t = getSlideFromHash();
+      if (t !== current) render(t, false);
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.code === 'Space' || e.key === 'PageDown') { e.preventDefault(); next(); }
+      else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+      else if (e.key === 'Home') { e.preventDefault(); goToFirst(); }
+      else if (e.key === 'End') { e.preventDefault(); render(total - 1); }
+    });
+
+    window.addEventListener('DOMContentLoaded', initSlides);
+</script>
+</body>
+</html>
