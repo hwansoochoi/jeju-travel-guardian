@@ -1,4 +1,5 @@
 {
+  "buildCommand": "bash scripts/inject-version.sh",
   "cleanUrls": true,
   "outputDirectory": "public",
   "headers": [
