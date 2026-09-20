@@ -32,3 +32,6 @@ build/
 
 # 빌드 시 생성 (배포 커밋 대조용)
 public/version.json
+build/
+__pycache__/
+*.pyc
