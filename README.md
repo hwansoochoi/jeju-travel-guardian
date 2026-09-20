@@ -164,7 +164,31 @@ GEMINI_TASK_PROMPT.md    # 개선 작업 지시서
 - **슬라이드 18~19**: 58MM / 12개월 재산정 공수표 및 Phase 1/2/3 로드맵
 
 ### 2. Vercel 배포 (권장)
-GitHub 저장소를 Vercel에 연동하면 별도 빌드 과정 없이 `public/` 디렉터리(`vercel.json`의 `outputDirectory`)가 전 세계 글로벌 CDN을 통해 초고속 정적 웹사이트로 자동 배포됩니다.
+GitHub 저장소를 Vercel에 연동하면 `public/` 디렉터리(`vercel.json`의 `outputDirectory`)가 전 세계 글로벌 CDN을 통해 정적 웹사이트로 자동 배포됩니다.
+
+빌드 단계에서 `scripts/inject-version.sh`가 배포 커밋 해시를 `public/version.json`으로 떨굽니다.
+
+### 2-1. 배포 확인 — 반드시 커밋으로 대조
+
+```bash
+./scripts/verify-deploy.sh
+```
+
+배포본이 알려주는 커밋을 `origin/main`과 대조하고, 공개 페이지 4종의 응답을 확인합니다.
+불일치면 실패(exit 1)로 끝냅니다.
+
+**"정상 응답(200)"만 보는 확인은 확인이 아닙니다.** 개발 브랜치에만 병합하고 배포
+푸시를 빠뜨려도 이전 배포본이 계속 200을 돌려주기 때문입니다.
+
+```
+== 배포 확인 (https://jeju-travel-guardian.vercel.app) ==
+  ✓ 커밋 일치 f75f517a  (빌드 2026-09-20T02:56:53Z)
+  ✓ / (200)
+  ✓ /v2/ (200)
+  ✓ /review/ (200)
+  ✓ /review-deck/ (200)
+== 배포 확인 통과 ==
+```
 
 ### 3. Cloudflare Pages / Workers Static Assets 배포 (선택)
 Cloudflare Pages에 Git 리포지토리를 연결하거나, `wrangler.toml`을 통해 `npx wrangler deploy`를 실행하면 `public/` 디렉터리가 Cloudflare 글로벌 엣지 네트워크에서 정적 자산으로 직접 서빙됩니다. (기존 98KB 문자열 복제 방식의 `worker.js`를 폐기하고 원본 직접 서빙 체계로 전환하여 항상 최신 본문과의 100% 일치를 보장합니다.)
