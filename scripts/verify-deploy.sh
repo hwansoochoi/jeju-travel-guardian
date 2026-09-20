@@ -41,7 +41,7 @@ else
 fi
 
 # 공개 페이지가 실제로 살아 있는지도 함께 본다.
-for path in "/" "/v2/" "/review/" "/review-deck/"; do
+for path in "/" "/doc/" "/v2/" "/review/" "/review-deck/"; do
   CODE=$(curl -s -o /dev/null -m 15 -w "%{http_code}" "$BASE$path")
   [ "$CODE" = "200" ] && ok "$path ($CODE)" || bad "$path ($CODE)"
 done

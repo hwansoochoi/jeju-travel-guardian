@@ -1654,7 +1654,7 @@
         <div class="sys-arch-layer" style="border-color: rgba(245,158,11,0.35);">
           <div class="sys-layer-title" style="color: #fbbf24;">
             <span>🚨 Layer 4: 웹 통합 관제탑 & 긴급 출동 연계망 (Admin & Emergency Dispatch)</span>
-            <span class="sys-layer-sub">Next.js 15 / Mapbox GL JS / 119·112 상황실 직결</span>
+            <span class="sys-layer-sub">Next.js 15 / Mapbox GL JS / 119·112 연계는 기관 협약 전제 (Phase 3)</span>
           </div>
           <div class="sys-node-grid">
             <div class="sys-node">
@@ -1662,12 +1662,12 @@
               <span>Next.js 15, Mapbox GL JS 실시간 GIS 상황판, 이상 탐방객 팝업 경보, 현장 출동 지령기</span>
             </div>
             <div class="sys-node">
-              <strong style="color:#fff;">🚒 119 소방 종합상황실 E-Call</strong>
-              <span>산악·해안 UTM-K 국가지점번호 자동 변환, 부상 부위·기저질환·배터리 잔량 표준 리포트 발송</span>
+              <strong style="color:#fff;">🚒 119 소방 종합상황실 연계 <span style="color:#fbbf24;font-size:0.78em;">[Phase 3 · 협약 전제]</span></strong>
+              <span>산악·해안 UTM-K 국가지점번호 자동 변환 및 표준 리포트 전달. <strong style="color:#fca5a5;">민간 앱용 공개 표준 인터페이스가 없어 시스템 직결은 별도 트랙이며, Phase 1은 원클릭 전화 + 신고카드 화면 표출로 동작합니다.</strong></span>
             </div>
             <div class="sys-node">
               <strong style="color:#fff;">🚓 112 경찰 & 피어 지킴이망</strong>
-              <span>도심 신변위협 위치 순찰차 직결, 반경 1km 내 동행 여행자 및 등록 지킴이(상인/주민) 비상 푸시</span>
+              <span>반경 1km 내 동행 여행자 및 등록 지킴이(상인/주민) 비상 푸시. <strong style="color:#fca5a5;">112 순찰차 직결은 경찰청 협약 전제로 Phase 3에 분리했습니다.</strong></span>
             </div>
             <div class="sys-node">
               <strong style="color:#fff;">💬 보호자 긴급 통보 게이트웨이</strong>
@@ -1809,7 +1809,7 @@
     <section class="slide">
       <span class="badge amber">ADMIN & DISPATCH CONSOLE</span>
       <h2>통합 관제탑(Admin) 핵심 관리자 기능 명세</h2>
-      <p class="desc">지자체(제주도청), 소방 종합상황실, 경찰서에서 24시간 실시간으로 감시 및 초동 조치하는 관제 시스템입니다.</p>
+      <p class="desc">위험 징후가 감지된 건만 자동으로 선별해 올리는 <strong>무인 자동화 + 이벤트 온콜</strong> 구조입니다. <strong style="color:#fca5a5;">상시 교대 인력을 전제하지 않으며</strong>, 지자체·소방·경찰이 필요 시점에만 열람·조치합니다.</p>
       <div class="grid-2">
         <div class="card">
           <div class="card-tag" style="background:rgba(245,158,11,0.15); color:#fbbf24;">실시간 GIS 관제 기능</div>
@@ -1827,7 +1827,7 @@
           <h3>2. 119/112 원클릭 출동 지령 & 데이터 관리</h3>
           <p style="margin-bottom:10px;">소방·경찰 상황실과의 원스톱 연동 및 현장 안전 인프라를 등록·유지보수합니다.</p>
           <ul style="list-style:none; font-size:12px; color:#cbd5e1; display:flex; flex-direction:column; gap:6px;">
-            <li>🚨 <strong>소방 직결 지령 카드:</strong> 조난자의 국가지점번호, 고도, 배터리 잔량, 의료정보를 출동 지령서로 즉시 발권</li>
+            <li>🚨 <strong>구조 정보 카드 생성:</strong> 조난자의 국가지점번호, 고도, 배터리 잔량, 의료정보를 한 장으로 출력·전달 (소방 시스템 직결은 협약 전제)</li>
             <li>🏪 <strong>안심포인트 인프라 CRUD:</strong> 아동지킴이, 24시 편의점, AED, 주유소 위치 및 야간 운영상태 실시간 갱신</li>
             <li>📊 <strong>위험구역 빅데이터 분석:</strong> 조난 빈발 지점, 신고 다발 골목길 히트맵 분석을 통해 지자체 CCTV/가로등 증설 제안</li>
             <li>🔐 <strong>개인정보 암호화 열람:</strong> 위기 발생 시에만 보호자/경찰에게 제한적으로 열람 권한을 부여하는 감사 로그 시스템</li>
