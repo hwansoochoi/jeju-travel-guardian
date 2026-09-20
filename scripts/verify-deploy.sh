@@ -7,6 +7,11 @@
 # 불일치면 실패(exit 1)로 끝낸다. 사람이 눈으로 넘기지 못하게 하려는 것이다.
 set -uo pipefail
 
+# 어느 디렉터리에서 실행하든 이 저장소를 기준으로 대조한다.
+# CWD 의 git 을 쓰면 다른 저장소에서 실행했을 때 엉뚱한 커밋과 비교해
+# 거짓 실패를 낸다. (실제로 한 번 겪었다)
+cd "$(dirname "$0")/.."
+
 BASE="${1:-https://jeju-travel-guardian.vercel.app}"
 BRANCH="${2:-main}"
 ok()   { printf "  \033[32m✓\033[0m %s\n" "$1"; }
