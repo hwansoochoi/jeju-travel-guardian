@@ -169,6 +169,21 @@ GEMINI_TASK_PROMPT.md    # 개선 작업 지시서
 - **슬라이드 15**: OS별 재검증 결과 9행 매트릭스 (붉은 글씨가 v2 정정 항목)
 - **슬라이드 18~19**: 58MM / 12개월 재산정 공수표 및 Phase 1/2/3 로드맵
 
+### 1-1. 편집 가능한 문서 만들기
+
+제출 정본(`public/doc/index.html`)을 편집 가능한 파일로 찍어냅니다.
+
+```bash
+python3 scripts/make_docx.py    # build/제안서.docx  (Word · 한글 모두 편집 가능)
+python3 scripts/make_hwpx.py    # build/제안서.hwpx  (한글에서 열어 .hwp 로 저장 가능)
+```
+
+**HTML 이 정본입니다.** 내용을 고칠 일이 생기면 `public/doc/index.html` 을 고치고
+위 명령을 다시 돌립니다. docx·hwpx 를 직접 고치면 정본과 어긋납니다.
+
+외부 패키지를 쓰지 않습니다(표준 라이브러리 `zipfile` 로 OOXML·OWPML 직접 작성).
+`.hwp` 이진 포맷은 직접 만들지 않습니다 — `.hwpx` 를 한글에서 열어 저장하십시오.
+
 ### 2. Vercel 배포 (권장)
 GitHub 저장소를 Vercel에 연동하면 `public/` 디렉터리(`vercel.json`의 `outputDirectory`)가 전 세계 글로벌 CDN을 통해 정적 웹사이트로 자동 배포됩니다.
 
