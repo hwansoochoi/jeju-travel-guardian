@@ -40,11 +40,31 @@ else
   fi
 fi
 
-# 공개 페이지가 실제로 살아 있는지도 함께 본다.
+# 페이지가 실제로 살아 있는지도 함께 본다.
 for path in "/" "/doc/" "/v2/" "/review/" "/review-deck/"; do
   CODE=$(curl -s -o /dev/null -m 15 -w "%{http_code}" "$BASE$path")
   [ "$CODE" = "200" ] && ok "$path ($CODE)" || bad "$path ($CODE)"
 done
+
+# 페이지가 200 이어도 그 안의 이미지가 404 일 수 있다.
+# 실제로 /v2/ 의 이미지가 상대경로 탓에 계속 404 였는데 아무도 몰랐다.
+for asset in "/assets/ai_companion_avatar.jpg"; do
+  CODE=$(curl -s -o /dev/null -m 15 -w "%{http_code}" "$BASE$asset")
+  [ "$CODE" = "200" ] && ok "$asset ($CODE)" || bad "$asset ($CODE)"
+done
+
+# 공개본(/)과 내부 작업본(/v2/)이 갈라지지 않았는지 본다.
+# 내부에서 고치고 공개본에 올리는 것을 잊으면 담당자가 옛 내용을 본다.
+PUB=$(curl -s -m 20 "$BASE/" | shasum -a 256 | cut -d" " -f1)
+INT=$(curl -s -m 20 "$BASE/v2/" | shasum -a 256 | cut -d" " -f1)
+if [ "$PUB" = "$INT" ]; then
+  ok "공개본과 내부본 내용 일치"
+else
+  printf "  \033[33m·\033[0m 공개본과 내부본이 다릅니다 — 내부 수정이 아직 공개되지 않았습니다\n"
+  echo "      공개(/)   : ${PUB:0:12}"
+  echo "      내부(/v2/): ${INT:0:12}"
+  echo "      → 공개할 시점이면  cp public/v2/index.html public/index.html"
+fi
 
 [ "$FAILED" -eq 0 ] && { echo "== 배포 확인 통과 =="; exit 0; }
 echo "== 배포 확인 실패 ==" >&2
