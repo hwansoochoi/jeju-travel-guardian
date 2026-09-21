@@ -1013,6 +1013,23 @@
         </div>
       </div>
 
+      <div class="grid-2" style="margin-top:14px;">
+        <div class="card" style="border-color:rgba(244,63,94,0.35);">
+          <div class="card-tag" style="background:rgba(244,63,94,0.15); color:#fda4af;">9월 21일 · 감지 경로</div>
+          <h3 style="color:#fda4af;">코스 이탈 30분 → 본인확인</h3>
+          <p>기존에는 <strong>정체</strong>만 감지했습니다. 정해진 코스를 <strong>30분 이상</strong> 벗어난 채 있으면 같은 2단계를 탑니다.
+          바로 전파하지 않는 이유 — 이탈은 정체보다 훨씬 흔합니다(쉼터·화장실·우회). 본인이 "괜찮다"고 답하면 끝납니다.
+          보호자 문구도 나눴습니다. <strong>"움직임이 없다"와 "길을 벗어났다"는 구조대가 찾을 곳이 다릅니다.</strong></p>
+        </div>
+        <div class="card" style="border-color:rgba(52,211,153,0.35);">
+          <div class="card-tag" style="background:rgba(52,211,153,0.15); color:#34d399;">9월 21일 · 외국인 안내</div>
+          <h3 style="color:#34d399;">자유 서술 번역 → 상황 선택지 8종</h3>
+          <p>번역은 통신을 요구하는데 <strong>조난은 통신이 없는 곳에서 납니다.</strong> 반면 구조대가 묻는 것은 정해져 있습니다 —
+          숨은 쉬는가, 피가 나는가, 스스로 움직일 수 있는가. 고른 항목이 한국어 음성과 문자 본문에 함께 나갑니다.
+          급할 때는 버튼 하나가 문장보다 빠르기도 합니다.</p>
+        </div>
+      </div>
+
       <div class="note" style="margin-top:14px;">
         <strong>바뀌지 않은 것</strong> — 기능 범위, 개발 기간(12개월 · 1단계 상용 6개월), 공수 산정(58 MM), 추진 단계 구분은 그대로입니다.
         위 개정은 <strong>기능을 줄이거나 늘린 것이 아니라 구현 조건과 법적 의무를 명확히 한 것</strong>입니다.
@@ -1143,7 +1160,7 @@
             <span>MONITOR</span>
           </div>
           <div class="arch-item"><strong>단독 궤적추적</strong>올레길·등산로 Breadcrumb 기록 & 코스 이탈 감지</div>
-          <div class="arch-item"><strong>2단계 데드맨 스위치</strong>10분 정체 본인확인 ➔ 3분 무응답 시에만 비상 전파</div>
+          <div class="arch-item"><strong>2단계 데드맨 스위치</strong>10분 정체 <strong>또는 코스 30분 이탈</strong> 시 본인확인 ➔ 3분 무응답 시에만 비상 전파</div>
           <div class="arch-item"><strong>라스트 핑 & 블랙박스</strong>음영 직전 좌표 백업 & 방전 직전 BLE 비콘(Android)</div>
           <div class="arch-item"><strong>야생동물 출몰 경보</strong>제주 들개·멧돼지 DB & 맹수 포효음·스트로브 경고</div>
         </div>
@@ -1165,7 +1182,7 @@
           <div class="arch-item"><strong>피어(이용자) SOS</strong>반경 1km 내 동료 여행자 & 로컬 지킴이 긴급 협조</div>
           <div class="arch-item"><strong>모빌리티 세이프티</strong>택시 비정상 이탈 감지 & 렌터카 전복 충격 e-Call</div>
           <div class="arch-item"><strong>올레길 안심 동행 매칭</strong>PASS 신원 인증 기반 1인 여행자 세이프 버디</div>
-          <div class="arch-item"><strong>119 원클릭 신고 & 다국어 TTS</strong>국가지점번호 표출 & 외국인 음성 자동 번역</div>
+          <div class="arch-item"><strong>119 원클릭 신고 & 다국어 TTS</strong>국가지점번호 표출 & 한국어 음성 송출 + 상황 선택지 8종</div>
         </div>
       </div>
     </section>
@@ -1232,7 +1249,7 @@
         <div class="step-box">
           <span class="step-num">STEP 01</span>
           <h3 style="font-size:15px; margin-bottom:6px; color:#fff;">안전 궤적 & 이탈 감지</h3>
-          <p style="font-size:12px; color:#94a3b8;">올레길·등산로 브레드크럼(Breadcrumb) 실시간 기록. 코스 이탈 또는 위험지역 10분 정체 감지</p>
+          <p style="font-size:12px; color:#94a3b8;">올레길·등산로 브레드크럼(Breadcrumb) 실시간 기록. 위험지역 10분 정체 또는 <strong>코스 30분 이탈</strong> 감지</p>
         </div>
         <div class="arrow">➔</div>
         <div class="step-box" style="border-color: rgba(245,158,11,0.5);">
@@ -1410,8 +1427,8 @@
             <p>도로명 주소가 없는 숲속에서도 119 상황실이 사용하는 표준 좌표번호를 <strong>오프라인 내장 연산</strong>으로 즉시 산출. 외부 API 장애와 무관하게 동작합니다.</p>
           </div>
           <div class="card" style="margin-bottom: 12px;">
-            <h3 style="color:#34d399;">외국인 관광객 다국어 TTS 음성 번역</h3>
-            <p>외국인 여행자가 터치 시 한국어로 자동 변환된 조난 음성 리포트가 119 상황실 요원에게 즉각 송출</p>
+            <h3 style="color:#34d399;">외국인 관광객 한국어 음성 송출</h3>
+            <p>화면은 여행자의 말(한·영·중·일), <strong>음성은 한국어</strong>로 나갑니다. 통화 중 터치하면 좌표·고도·배터리와 <strong>상황 선택지 8종</strong>(숨쉬기 힘듦·출혈·다쳤음·못 움직임 등)에서 고른 항목을 한국어로 읽어 상황실 요원이 듣습니다. 번역 서버 없이 단말에서 조립하므로 <strong>통신이 끊겨도 동작</strong>합니다.</p>
           </div>
           <div class="card">
             <h3 style="color:#38bdf8;">주변 안심포인트 & 응급실 자동 병합</h3>
