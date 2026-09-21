@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>스마트 세이프 트래블 가디언 - 제주 안심 여행</title>
+  <style>
+    /* 기본 리셋 및 다크 테마 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Apple SD Gothic Neo, sans-serif;
+    }
+    body {
+      background-color: #090d16;
+      color: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* 상단 헤더 */
+    header {
+      width: 100%;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #1e293b;
+      background-color: rgba(9, 13, 22, 0.95);
+      z-index: 10;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+    }
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #10b981;
+      box-shadow: 0 0 10px #10b981;
+    }
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .progress-bar-bg {
+      width: 160px;
+      height: 6px;
+      background-color: #1e293b;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 14%;
+      background: linear-gradient(90deg, #10b981, #06b6d4);
+      transition: width 0.3s ease;
+    }
+    .slide-counter {
+      font-size: 12px;
+      font-family: monospace;
+      color: #64748b;
+    }
+
+    /* 슬라이드 캔버스 */
+    main {
+      flex: 1;
+      max-width: 1050px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .slide {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      animation: fadeIn 0.35s ease forwards;
+    }
+    .slide.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 뱃지 및 타이포그래피 */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      align-self: flex-start;
+    }
+    .center .badge {
+      align-self: center;
+    }
+    h1 {
+      font-size: 44px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 20px;
+    }
+    .gradient-text {
+      background: linear-gradient(90deg, #34d399, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      line-height: 1.3;
+    }
+    p.desc {
+      font-size: 16px;
+      color: #94a3b8;
+      line-height: 1.65;
+      margin-bottom: 30px;
+    }
+
+    /* 그리드 및 카드 디자인 */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 100%;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      width: 100%;
+    }
+    .card {
+      background-color: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 14px;
+      padding: 22px;
+    }
+    .card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .card p {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.55;
+    }
+    .card-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    /* 프로세스 스텝 (슬라이드 4) */
+    .step-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+    }
+    .step-box {
+      flex: 1;
+      background: #111827;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #1f2937;
+    }
+    .step-num {
+      font-size: 11px;
+      font-family: monospace;
+      color: #64748b;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .arrow {
+      color: #475569;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    /* UI 목업 (슬라이드 6) */
+    .mockup {
+      background: #0f172a;
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(244, 63, 94, 0.1);
+    }
+    .mockup-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #1e293b;
+      font-size: 13px;
+    }
+    .btn-emergency {
+      width: 100%;
+      padding: 13px;
+      margin-top: 18px;
+      background: #e11d48;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* 하단 컨트롤러 */
+    footer {
+      width: 100%;
+      padding: 16px 28px;
+      border-top: 1px solid #1e293b;
+      background-color: #090d16;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+    }
+    .key-tip {
+      font-size: 12px;
+      color: #64748b;
+    }
+    .btn-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    button.nav-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s;
+    }
+    .btn-prev {
+      background: #1e293b;
+      color: #cbd5e1;
+    }
+    .btn-next {
+      background: #10b981;
+      color: #ffffff;
+    }
+    .btn-full {
+      background: #1e293b;
+      color: #cbd5e1;
+      padding: 8px 12px;
+    }
+    button:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 상단 네비게이션 -->
+  <header>
+    <div class="brand">
+      <div class="pulse-dot"></div>
+      <span>JEJU SAFE GUARDIAN</span>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar-bg">
+        <div id="progressBar" class="progress-bar-fill"></div>
+      </div>
+      <span id="slideCounter" class="slide-counter">01 / 07</span>
+    </div>
+  </header>
+
+  <!-- 슬라이드 본체 -->
+  <main>
+    <!-- 1번 슬라이드: 커버 -->
+    <section class="slide active center" style="text-align: center; max-width: 800px;">
+      <div class="badge">📍 제주 특화 지오펜싱 & 구조 안전망</div>
+      <h1>스마트 세이프 <br><span class="gradient-text">트래블 가디언</span></h1>
+      <p class="desc">
+        반복되는 제주 관광객 고립·실종 사고를 방지하기 위해<br>
+        <strong>상시 감시의 거부감</strong>을 없애고 <strong>위기 순간의 골든타임</strong>을 지키는 스마트 안전 플랫폼
+      </p>
+      <div class="grid-3" style="margin-top: 10px;">
+        <div class="card"><p style="color:#64748b; font-size:11px;">오발송 0%</p><h3>2단계 체크인</h3></div>
+        <div class="card"><p style="color:#64748b; font-size:11px;">환경 데이터</p><h3>동적 지오펜싱</h3></div>
+        <div class="card"><p style="color:#64748b; font-size:11px;">골든타임 확보</p><h3>119 원클릭 전송</h3></div>
+      </div>
+    </section>
+
+    <!-- 2번 슬라이드: 문제점 -->
+    <section class="slide">
+      <span class="badge">PROBLEM</span>
+      <h2>기존 위치추적 앱이 제주에서 외면받는 이유</h2>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-tag" style="color:#f43f5e; background:rgba(244,63,94,0.15);">01</div>
+          <h3>성인 사용자의 반발</h3>
+          <p>종일 실시간 위치를 감시당하는 형태는 프라이버시 침해로 느껴져 여행 시작 직후 앱을 꺼버립니다.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag" style="color:#f59e0b; background:rgba(245,158,11,0.15);">02</div>
+          <h3>잦은 오경보 (피로감)</h3>
+          <p>단순 카페 휴식이나 경치 구경(10분 정지) 때마다 보호자에게 알림이 울려 양치기 소년이 됩니다.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag" style="color:#06b6d4; background:rgba(6,182,212,0.15);">03</div>
+          <h3>제주 지형 특성 미반영</h3>
+          <p>곶자왈 통신 음영, 계절별 급격한 산간 일몰, 해안 만조(밀물) 등 고유의 위험 요소를 계산하지 못합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3번 슬라이드: 솔루션 요약 -->
+    <section class="slide">
+      <span class="badge">SOLUTION</span>
+      <h2>스마트 세이프 가디언의 4대 핵심 체계</h2>
+      <div class="grid-2">
+        <div class="card">
+          <span class="card-tag">기능 01</span>
+          <h3>2단계 체크인 (Dead Man's Switch)</h3>
+          <p>위험구역 10분 정체 시 본인에게 먼저 확인 진동을 발송하여 무응답 시에만 보호자에게 전파.</p>
+        </div>
+        <div class="card">
+          <span class="card-tag">기능 02</span>
+          <h3>동적 위험 지오펜스 (Geo-Fencing)</h3>
+          <p>당일 일몰 시각과 해안 조석(만조) 시간을 기상청 데이터와 실시간 연동해 자동 경고.</p>
+        </div>
+        <div class="card">
+          <span class="card-tag">기능 03</span>
+          <h3>세이프 트레킹 모드 (On/Off)</h3>
+          <p>오름·올레길 탐방 시에만 고정밀 GPS를 켜고 일반 시내에서는 대략적 위치만 공유해 배터리 절약.</p>
+        </div>
+        <div class="card">
+          <span class="card-tag">기능 04</span>
+          <h3>119 원클릭 신고 리포트 패키지</h3>
+          <p>주소가 없는 산악 구역에서도 출동할 수 있도록 국가지점번호, 위경도, 고도 정보를 원클릭 전송.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4번 슬라이드: 2단계 체크인 상세 -->
+    <section class="slide">
+      <span class="badge">DEEP DIVE 01</span>
+      <h2>오경보를 90% 이상 차단하는 2단계 검증 흐름</h2>
+      <p class="desc">여행자의 자유를 방해하지 않고, 실제 의식 불명이나 조난 상태만 정확하게 판별합니다.</p>
+      <div class="step-container">
+        <div class="step-box">
+          <span class="step-num">STEP 01</span>
+          <h3 style="font-size:15px; margin-bottom:6px; color:#fff;">위험 구역 10분 정체</h3>
+          <p style="font-size:12px; color:#94a3b8;">일몰 후 산악·곶자왈 구역에서 이동 속도가 0으로 지속 감지</p>
+        </div>
+        <div class="arrow">➔</div>
+        <div class="step-box" style="border-color: rgba(245,158,11,0.5);">
+          <span class="step-num" style="color:#f59e0b;">STEP 02 (본인 확인)</span>
+          <h3 style="font-size:15px; margin-bottom:6px; color:#fde68a;">진동 & "안전하신가요?"</h3>
+          <p style="font-size:12px; color:#94a3b8;">화면 탭, 기기 흔들림, 음성 응답 시 상황 즉시 정상 해제</p>
+        </div>
+        <div class="arrow">➔</div>
+        <div class="step-box" style="border-color: rgba(244,63,94,0.5);">
+          <span class="step-num" style="color:#f43f5e;">STEP 03 (비상 전파)</span>
+          <h3 style="font-size:15px; margin-bottom:6px; color:#fca5a5;">보호자 긴급 알림</h3>
+          <p style="font-size:12px; color:#94a3b8;">3분간 무응답 시 보호자 앱으로 "통화 권유 + 현재 좌표 + 119 카드" 발송</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5번 슬라이드: 제주 특화 지오펜스 -->
+    <section class="slide">
+      <span class="badge">DEEP DIVE 02</span>
+      <h2>제주 고유 환경 맞춤형 동적 안전망</h2>
+      <div class="grid-3">
+        <div class="card">
+          <div style="font-size:26px; margin-bottom:12px;">🌅</div>
+          <h3>일몰 연동 하산 경보</h3>
+          <p>여름(19:40)과 겨울(17:20)의 극명한 일몰 차이를 반영해 당일 일몰 30분 전 산악 체류자에게 하산 권고.</p>
+        </div>
+        <div class="card">
+          <div style="font-size:26px; margin-bottom:12px;">🌊</div>
+          <h3>해안·갯바위 만조 알림</h3>
+          <p>국립해양조사원 밀물 데이터 연동. 갯바위 낚시나 해루질 시 만조 40분 전 긴급 대피 경고 발송.</p>
+        </div>
+        <div class="card">
+          <div style="font-size:26px; margin-bottom:12px;">📡</div>
+          <h3>곶자왈 '라스트 핑' 백업</h3>
+          <p>수풀로 인해 통신이 끊어지기 직전의 마지막 정상 GPS 좌표와 배터리 상태를 기록해 수색 범위 90% 단축.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6번 슬라이드: 119 연계 목업 -->
+    <section class="slide">
+      <span class="badge">RESCUE CARD</span>
+      <h2>소방관이 즉각 출동할 수 있는 119 연계 체계</h2>
+      <div class="grid-2" style="align-items: center;">
+        <div>
+          <div class="card" style="margin-bottom: 12px;">
+            <h3 style="color:#34d399;">산악 국가지점번호 자동 매핑</h3>
+            <p>도로명 주소가 없는 숲속에서도 119 상황실 시스템에 직결되는 고유 번호 즉각 변환</p>
+          </div>
+          <div class="card">
+            <h3 style="color:#34d399;">낙상 및 충격 센서 감지</h3>
+            <p>스마트폰 가속도계를 통해 미끄러짐이나 절벽 추락 후 움직임이 없으면 비상 신호 작동</p>
+          </div>
+        </div>
+
+        <div class="mockup">
+          <div style="display:flex; justify-content:space-between; margin-bottom:14px; font-size:12px;">
+            <span style="color:#f43f5e; font-weight:700;">🚨 비상 구조 데이터 리포트</span>
+            <span style="color:#64748b; font-family:monospace;">18:42 KST</span>
+          </div>
+          <div class="mockup-row"><span style="color:#94a3b8;">피보호자</span><span style="font-weight:600;">김*수 (성인)</span></div>
+          <div class="mockup-row"><span style="color:#94a3b8;">좌표/고도</span><span style="color:#34d399; font-family:monospace;">33.3617° N, 126.5292° E (420m)</span></div>
+          <div class="mockup-row"><span style="color:#94a3b8;">국가지점번호</span><span style="font-weight:700; font-family:monospace;">다라 6245 8812</span></div>
+          <div class="mockup-row"><span style="color:#94a3b8;">상태</span><span style="color:#f59e0b; font-weight:700;">위험지역 14분 정체 (체크인 무응답)</span></div>
+          <button class="btn-emergency">📞 제주소방본부(119)에 구조 데이터 전송 및 연결</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7번 슬라이드: 비전 -->
+    <section class="slide center" style="text-align: center; max-width: 800px;">
+      <span class="badge">VISION</span>
+      <h2>혼자 와도 걱정 없는 안심 제주</h2>
+      <p class="desc">
+        제주관광공사 및 소방본부의 오픈 데이터를 연계하여<br>
+        <strong>'사고 발생 후 수색'</strong>에서 <strong>'사전 조난 차단'</strong>으로 안전 패러다임을 혁신합니다.
+      </p>
+      <div class="grid-3" style="text-align: left; margin-top: 10px;">
+        <div class="card"><span class="card-tag">Phase 1</span><h3>MVP 앱 런칭</h3><p>2단계 체크인 및 일몰 연동 지오펜스 구축</p></div>
+        <div class="card"><span class="card-tag">Phase 2</span><h3>공공 데이터 결합</h3><p>조석 만조 API 및 올레길 코스 안전 알림 제휴</p></div>
+        <div class="card"><span class="card-tag">Phase 3</span><h3>소방 직결망</h3><p>119 상황실 출동 시스템 데이터 원스톱 연계</p></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 하단 컨트롤 버튼 -->
+  <footer>
+    <div class="key-tip">단축키: 키보드 [←] [→] 또는 [Space]</div>
+    <div class="btn-group">
+      <button id="prevBtn" class="nav-btn btn-prev">이전</button>
+      <button id="nextBtn" class="nav-btn btn-next">다음</button>
+      <button id="fullBtn" class="nav-btn btn-full">⛶ 전체화면</button>
+    </div>
+  </footer>
+
+  <!-- 슬라이드 제어 자바스크립트 -->
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const fullBtn = document.getElementById('fullBtn');
+    const counter = document.getElementById('slideCounter');
+    const progBar = document.getElementById('progressBar');
+
+    let current = 0;
+    const total = slides.length;
+
+    function render(idx) {
+      slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+      counter.textContent = `${String(idx + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+      progBar.style.width = `${((idx + 1) / total) * 100}%`;
+      prevBtn.disabled = (idx === 0);
+      nextBtn.textContent = (idx === total - 1) ? '처음으로' : '다음';
+    }
+
+    function next() {
+      current = (current + 1) % total;
+      render(current);
+    }
+
+    function prev() {
+      if (current > 0) {
+        current--;
+        render(current);
+      }
+    }
+
+    nextBtn.addEventListener('click', next);
+    prevBtn.addEventListener('click', prev);
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space') {
+        e.preventDefault();
+        next();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prev();
+      }
+    });
+
+    fullBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+
+    render(0);
+  </script>
+</body>
+</html>
