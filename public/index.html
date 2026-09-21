@@ -933,7 +933,7 @@
         <div class="progress-bar-bg">
           <div id="progressBar" class="progress-bar-fill"></div>
         </div>
-        <span id="slideCounter" class="slide-counter">01 / 19</span>
+        <span id="slideCounter" class="slide-counter">01 / 20</span>
       </div>
     </div>
   </header>
@@ -969,7 +969,60 @@
       </div>
     </section>
 
-    <!-- 2번 슬라이드: 문제점 -->
+    <!-- 2번 슬라이드: 개정 이력 -->
+    <section class="slide">
+      <span class="badge cyan">REVISION LOG</span>
+      <h2>이 자료에서 무엇이 바뀌었는가</h2>
+      <p class="desc">작성 후에도 <strong>선행 개발을 계속하며 확인된 사실을 반영</strong>합니다. 이전 판을 보신 분은 이 장만 보시면 차이를 알 수 있습니다.</p>
+
+      <div class="grid-2" style="margin-bottom:14px;">
+        <div class="card" style="border-color:rgba(56,189,248,0.35);">
+          <div class="card-tag" style="background:rgba(56,189,248,0.15); color:#38bdf8;">9월 21일 · 법적 의무</div>
+          <h3 style="color:#38bdf8;">위치정보법 준수 항목 반영</h3>
+          <p>개인위치정보는 개인정보 일반과 <strong>별도의 법</strong> 적용을 받고, 동의 없는 수집·이용·제공은 형사처벌 대상입니다.
+          수집 동의, 제3자 제공 <strong>별도</strong> 동의, 제공 시 <strong>즉시 통보</strong>, 제공사실 기록, 열람·철회를
+          <strong>실제 구현해 동작을 확인한 뒤</strong> 반영했습니다.</p>
+        </div>
+        <div class="card" style="border-color:rgba(251,191,36,0.35);">
+          <div class="card-tag" style="background:rgba(251,191,36,0.15); color:#fbbf24;">9월 21일 · 범위 한정</div>
+          <h3 style="color:#fbbf24;">코스 이탈 감지 적용 구간</h3>
+          <p>공공데이터포털의 올레 코스 자료에 <strong>좌표가 없다는 사실</strong>을 확인했습니다(코스명·거리·시종점 문자 정보만 제공).
+          이탈 판정의 기준선을 만들 수 없으므로 <strong>한라산 주요 등산로부터</strong> 적용하고, 올레 코스는 원천 확보 방안을 별도 확정합니다.</p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-tag">관제 설계</div>
+          <h3 style="color:#34d399;">사건 단위 열람</h3>
+          <p>관제 요원은 이용자가 동의한 제공 대상(보호자)이 <strong>아닌 제3자</strong>입니다. 상시 전체 표출이 동의 범위를 넘으므로
+          <strong>전파된 사건만</strong> 열람하는 구조로 확정했습니다.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">보호자 통보</div>
+          <h3 style="color:#34d399;">푸시 통보로 확정</h3>
+          <p>카카오 알림톡 연동 표기를 <strong>보호자 단말 푸시</strong>로 정정했습니다. 전송 성공 여부를 건별로 확인하며,
+          실패 시 문자 신고 경로를 함께 안내합니다.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">안심포인트</div>
+          <h3 style="color:#34d399;">실시간 조회로 대체</h3>
+          <p>편의점·주유소·지구대·AED·응급실을 <strong>공공 API 실시간 조회</strong>로 가져옵니다. 자체 등록·갱신하면
+          낡은 정보로 이용자를 보내게 됩니다.</p>
+        </div>
+      </div>
+
+      <div class="note" style="margin-top:14px;">
+        <strong>바뀌지 않은 것</strong> — 기능 범위, 개발 기간(12개월 · 1단계 상용 6개월), 공수 산정(58 MM), 추진 단계 구분은 그대로입니다.
+        위 개정은 <strong>기능을 줄이거나 늘린 것이 아니라 구현 조건과 법적 의무를 명확히 한 것</strong>입니다.
+        <br /><br />
+        <strong>도청 제출 정본은 별도의 사업제안서</strong>이며, 그 문서는 전체 구상 중 <strong>불확실 요소가 없는 1단계만</strong> 떼어내
+        핵심 기능 6종 · 6개월 · 약 5.4억~6.5억 원으로 산정합니다. 본 자료(58 MM · 12개월)와 수치가 다른 것은
+        <strong>범위가 다르기 때문이며 상충이 아닙니다.</strong>
+      </div>
+    </section>
+
+    <!-- 3번 슬라이드: 문제점 -->
     <section class="slide">
       <span class="badge red">PROBLEM & CHALLENGE</span>
       <h2>나홀로 여행객이 직면하는 3대 현실적 복합 위기</h2>
@@ -994,7 +1047,7 @@
     </section>
 
 
-    <!-- 3번 슬라이드: 착수 전 기술 검증 결과 -->
+    <!-- 4번 슬라이드: 착수 전 기술 검증 결과 -->
     <section class="slide">
       <span class="badge cyan">FEASIBILITY VERIFIED</span>
       <h2>착수 전 기술 검증 결과</h2>
@@ -1067,7 +1120,7 @@
       </div>
     </section>
 
-    <!-- 4번 슬라이드: 4대 영역 16대 통합 아키텍처 매트릭스 -->
+    <!-- 5번 슬라이드: 4대 영역 16대 통합 아키텍처 매트릭스 -->
     <section class="slide">
       <span class="badge cyan">FULL ARCHITECTURE MATRIX</span>
       <h2>차세대 가디언 4대 영역 & 16대 스마트 안전 체계</h2>
@@ -1116,7 +1169,7 @@
       </div>
     </section>
 
-    <!-- 4번 슬라이드: 공공데이터 & 위험 지오펜싱 -->
+    <!-- 6번 슬라이드: 공공데이터 & 위험 지오펜싱 -->
     <section class="slide">
       <span class="badge amber">DEEP DIVE 01 : RISK RADAR</span>
       <h2>공공데이터 기반 동적 환경 & 범죄·치안 위험 지오펜스</h2>
@@ -1169,7 +1222,7 @@
       </div>
     </section>
 
-    <!-- 5번 슬라이드: 단독여행자 실시간 추적 & 2단계 체크인 -->
+    <!-- 7번 슬라이드: 단독여행자 실시간 추적 & 2단계 체크인 -->
     <section class="slide">
       <span class="badge">DEEP DIVE 02 : SMART TRACKING</span>
       <h2>단독여행자 실시간 궤적추적 & 2단계 체크인 (Dead Man's Switch)</h2>
@@ -1204,7 +1257,7 @@
       </div>
     </section>
 
-    <!-- 6번 슬라이드: 신변 위협 & 범죄 차단 특화 -->
+    <!-- 8번 슬라이드: 신변 위협 & 범죄 차단 특화 -->
     <section class="slide">
       <span class="badge red">DEEP DIVE 03 : STEALTH & AI DEFENSE</span>
       <h2>주머니 속 무음 SOS, AI 가상 동행 & 숙소 안전 점검</h2>
@@ -1236,7 +1289,7 @@
       </div>
     </section>
 
-    <!-- 7번 슬라이드: 극한 자연 & 모빌리티 세이프티 -->
+    <!-- 9번 슬라이드: 극한 자연 & 모빌리티 세이프티 -->
     <section class="slide">
       <span class="badge purple">DEEP DIVE 04 : NATURE & MOBILITY</span>
       <h2>오프라인 BLE 메시 릴레이, 블랙박스 비콘 & 모빌리티 e-Call</h2>
@@ -1270,7 +1323,7 @@
       </div>
     </section>
 
-    <!-- 8번 슬라이드: 안심포인트 & 인근 병원 최단 대피망 -->
+    <!-- 10번 슬라이드: 안심포인트 & 인근 병원 최단 대피망 -->
     <section class="slide">
       <span class="badge indigo">DEEP DIVE 05 : SAFE HAVEN</span>
       <h2>여행자 안심포인트 & 응급의료기관 최단경로 대피망</h2>
@@ -1313,7 +1366,7 @@
       </div>
     </section>
 
-    <!-- 9번 슬라이드: 위기 탈출 3대 대응책 & 피어 SOS -->
+    <!-- 11번 슬라이드: 위기 탈출 3대 대응책 & 피어 SOS -->
     <section class="slide">
       <span class="badge red">DEEP DIVE 06 : CRISIS RESPONSE</span>
       <h2>위기 탈출 3대 대응책: 최대 음량 사이렌, 상황별 연락, 피어 SOS</h2>
@@ -1344,7 +1397,7 @@
       </div>
     </section>
 
-    <!-- 10번 슬라이드: 119 원클릭 전송 목업 -->
+    <!-- 12번 슬라이드: 119 원클릭 전송 목업 -->
     <section class="slide">
       <span class="badge red">RESCUE PACKAGE MOCKUP</span>
       <h2>소방관이 오차 없이 출동하는 119 신고 카드</h2>
@@ -1390,7 +1443,7 @@
       </div>
     </section>
 
-    <!-- 11번 슬라이드: 인터랙티브 가디언 콘솔 (Live Simulator) -->
+    <!-- 13번 슬라이드: 인터랙티브 가디언 콘솔 (Live Simulator) -->
     <section class="slide">
       <span class="badge" style="background:rgba(16,185,129,0.2); color:#34d399;">⚡ LIVE INTERACTIVE CONSOLE</span>
       <h2>스마트 제주 트래블 가디언 실시간 시뮬레이션 콘솔</h2>
@@ -1516,7 +1569,7 @@
       </div>
     </section>
 
-    <!-- 12번 슬라이드: 비전 및 로드맵 -->
+    <!-- 14번 슬라이드: 비전 및 로드맵 -->
     <section class="slide center" style="text-align: center; max-width: 880px;">
       <span class="badge">FUTURE ROADMAP</span>
       <h2>혼자 와도 두려움 없는 안심 대한민국</h2>
@@ -1543,7 +1596,7 @@
       </div>
     </section>
 
-    <!-- 13번 슬라이드: 전체 시스템 아키텍처 & 데이터 흐름 구조도 [ENHANCED] -->
+    <!-- 15번 슬라이드: 전체 시스템 아키텍처 & 데이터 흐름 구조도 [ENHANCED] -->
     <section class="slide">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
         <span class="badge cyan">END-TO-END SYSTEM ARCHITECTURE</span>
@@ -1671,14 +1724,14 @@
             </div>
             <div class="sys-node">
               <strong style="color:#fff;">💬 보호자 긴급 통보 게이트웨이</strong>
-              <span>카카오 알림톡 및 통신사 재난 SMS 자동 연동, 실시간 이동경로 링크 즉각 전송</span>
+              <span>보호자 단말 푸시 알림으로 위치·상황 즉시 전달. 전송 성공 여부를 건별로 확인하며, 실패 시 문자 신고 경로를 함께 안내합니다</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 14번 슬라이드: OS별 제약 및 불가능한 항목 심층 검토 [ENHANCED] -->
+    <!-- 16번 슬라이드: OS별 제약 및 불가능한 항목 심층 검토 [ENHANCED] -->
     <section class="slide">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
         <span class="badge red">OS POLICY & FEASIBILITY ANALYSIS</span>
@@ -1805,7 +1858,7 @@
       </div>
     </section>
 
-    <!-- 15번 슬라이드: 백엔드 & 통합 관제 관리자 기능 명세 [NEW] -->
+    <!-- 17번 슬라이드: 백엔드 & 통합 관제 관리자 기능 명세 [NEW] -->
     <section class="slide">
       <span class="badge amber">ADMIN & DISPATCH CONSOLE</span>
       <h2>통합 관제탑(Admin) 핵심 관리자 기능 명세</h2>
@@ -1836,7 +1889,7 @@
       </div>
     </section>
 
-    <!-- 16번 슬라이드: 모바일 앱 핵심 모듈별 개발 구현 기법 [NEW] -->
+    <!-- 18번 슬라이드: 모바일 앱 핵심 모듈별 개발 구현 기법 [NEW] -->
     <section class="slide">
       <span class="badge indigo">CORE MODULE IMPLEMENTATION</span>
       <h2>모바일 앱 핵심 모듈별 개발 구현 기법</h2>
@@ -1869,7 +1922,7 @@
       </div>
     </section>
 
-    <!-- 17번 슬라이드: 개발 난이도, 개발 기간 및 공수(MM) 산정표(예상) [NEW] -->
+    <!-- 19번 슬라이드: 개발 난이도, 개발 기간 및 공수(MM) 산정표(예상) [NEW] -->
     <section class="slide">
       <span class="badge amber">WBS & MAN-MONTH ESTIMATION</span>
       <h2>개발 난이도, 개발 기간 및 소요 공수(MM) 재산정</h2>
@@ -1903,7 +1956,7 @@
           </tr>
           <tr>
             <td><strong>클라우드 백엔드</strong></td>
-            <td>FastAPI/PostGIS 공간연산, Redis 지오펜스, 공공데이터 파이프라인, 국가지점번호 엔진, 알림톡 게이트웨이</td>
+            <td>FastAPI/PostGIS 공간연산, Redis 지오펜스, 공공데이터 파이프라인, 국가지점번호 엔진, 보호자 통보 게이트웨이</td>
             <td><span class="tag-diff-med">중상 (Med-High)</span></td>
             <td>8.0개월</td>
             <td><strong>10.0 MM</strong> (백엔드 1명, 인프라 1명)</td>
@@ -1938,7 +1991,7 @@
       </div>
     </section>
 
-    <!-- 18번 슬라이드: 단계별 론칭 로드맵 & 기대효과 [NEW] -->
+    <!-- 20번 슬라이드: 단계별 론칭 로드맵 & 기대효과 [NEW] -->
     <section class="slide center" style="text-align: center; max-width: 880px;">
       <span class="badge">DEVELOPMENT ROADMAP</span>
       <h2>단계별 구축 계획 및 상용화 성공 전략</h2>
@@ -1954,7 +2007,7 @@
             - 2단계 데드맨 스위치 &amp; 브레드크럼 궤적<br>
             - 일몰 30분 전 · 만조 40분 전 사전경보<br>
             - 라스트 핑 &amp; 국가지점번호 119 신고카드<br>
-            - 안심포인트 · 응급실 · AED &amp; 보호자 알림톡<br>
+            - 안심포인트 · 응급실 · AED &amp; 보호자 푸시 통보<br>
             <span style="color:#fbbf24;">- ⚡ Critical Alerts 심사 착수 (1개월차 선행 신청)</span>
           </p>
         </div>
