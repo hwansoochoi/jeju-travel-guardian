@@ -1809,17 +1809,17 @@
     <section class="slide">
       <span class="badge amber">ADMIN & DISPATCH CONSOLE</span>
       <h2>통합 관제탑(Admin) 핵심 관리자 기능 명세</h2>
-      <p class="desc">위험 징후가 감지된 건만 자동으로 선별해 올리는 <strong>무인 자동화 + 이벤트 온콜</strong> 구조입니다. <strong style="color:#fca5a5;">상시 교대 인력을 전제하지 않으며</strong>, 지자체·소방·경찰이 필요 시점에만 열람·조치합니다.</p>
+      <p class="desc">위험 징후가 감지된 건만 자동으로 선별해 올리는 <strong>무인 자동화 + 이벤트 온콜</strong> 구조입니다. <strong style="color:#fca5a5;">상시 교대 인력을 전제하지 않으며</strong>, 지자체·소방·경찰이 필요 시점에만 열람·조치합니다. 관제 시스템의 <strong>구축은 수행 사업자</strong>가, <strong>운영·열람 권한 관리는 발주기관</strong>이 맡습니다 — 지자체 CCTV 통합관제센터와 같은 역할 분담입니다.</p>
       <div class="grid-2">
         <div class="card">
           <div class="card-tag" style="background:rgba(245,158,11,0.15); color:#fbbf24;">실시간 GIS 관제 기능</div>
-          <h3>1. 제주 & 전국 실시간 여행자 상황판</h3>
-          <p style="margin-bottom:10px;">수만 명의 동시 접속 여행자 중 '위험 징후'가 감지된 사용자만 필터링하여 관제합니다.</p>
+          <h3>1. 사건 단위 상황판 — 평상시 지도는 비어 있습니다</h3>
+          <p style="margin-bottom:10px;">정상 상태의 이용자는 <strong>지도에 표시하지 않습니다.</strong> 「위치정보의 보호 및 이용 등에 관한 법률」상 개인위치정보는 동의받은 범위에서만 제공할 수 있으며, 상시 전체 표출은 그 범위를 넘습니다.</p>
           <ul style="list-style:none; font-size:12px; color:#cbd5e1; display:flex; flex-direction:column; gap:6px;">
-            <li>📍 <strong>실시간 클러스터링 지도:</strong> 전체 활동자 핀포인트 및 위험도(정상/주의/위험/조난) 색상 표출</li>
-            <li>⏱️ <strong>이상 정체/이탈 알람:</strong> 10분 이상 이동 0 정체자, 올레 코스 200m 이탈자 즉각 팝업 경보</li>
+            <li>📍 <strong>전파된 사건만 표출:</strong> 본인 무응답으로 전파된 건에 한해 지도에 나타납니다. 정상·주의 상태는 표시 대상이 아닙니다</li>
+            <li>⏱️ <strong>이상 정체/이탈 알람:</strong> 일정 시간 이동 0 정체자, 코스 이탈자 팝업 경보 (기준값은 현장 시험으로 확정)</li>
             <li>📡 <strong>통신 두절자 라스트 핑 추적:</strong> 신호 끊긴 탐방객의 최종 정상 좌표 및 이동 방향 예상 경로 산출</li>
-            <li>👥 <strong>피어 SOS 활성화 맵:</strong> 도움 요청이 발생한 반경 1km 내 가용 인력(동행자/상인) 현황 실시간 중계</li>
+            <li>🔔 <strong>열람 시 본인 통보:</strong> 관제가 위치를 열람할 때마다 열람 주체·일시·목적을 이용자에게 자동 통보합니다 (법 제19조)</li>
           </ul>
         </div>
         <div class="card">
@@ -1828,9 +1828,9 @@
           <p style="margin-bottom:10px;">소방·경찰 상황실과의 원스톱 연동 및 현장 안전 인프라를 등록·유지보수합니다.</p>
           <ul style="list-style:none; font-size:12px; color:#cbd5e1; display:flex; flex-direction:column; gap:6px;">
             <li>🚨 <strong>구조 정보 카드 생성:</strong> 조난자의 국가지점번호, 고도, 배터리 잔량, 의료정보를 한 장으로 출력·전달 (소방 시스템 직결은 협약 전제)</li>
-            <li>🏪 <strong>안심포인트 인프라 CRUD:</strong> 아동지킴이, 24시 편의점, AED, 주유소 위치 및 야간 운영상태 실시간 갱신</li>
-            <li>📊 <strong>위험구역 빅데이터 분석:</strong> 조난 빈발 지점, 신고 다발 골목길 히트맵 분석을 통해 지자체 CCTV/가로등 증설 제안</li>
-            <li>🔐 <strong>개인정보 암호화 열람:</strong> 위기 발생 시에만 보호자/경찰에게 제한적으로 열람 권한을 부여하는 감사 로그 시스템</li>
+            <li>🗺️ <strong>탐방로 코스 관리:</strong> 등산로·올레 코스 선형을 등록하고 이탈 기준을 지정합니다. 안심포인트(편의점·주유소·지구대·AED·응급실)는 <strong>공공 API 실시간 조회</strong>로 대체해 자체 등록·갱신 대상에서 제외했습니다 — 직접 관리하면 낡은 정보로 이용자를 보내게 됩니다</li>
+            <li>📊 <strong>위험구역 분석:</strong> 조난 빈발 지점 분석을 통해 탐방로 안전시설(안내판·조명·통신 중계) 증설 우선순위 자료를 제공합니다</li>
+            <li>🔐 <strong>열람 기록 보존:</strong> 누가 누구의 위치를 언제 왜 열람했는지 자동 기록합니다 (법 제16조). 이용자는 앱에서 자신의 제공·열람 내역을 직접 확인하고 동의를 철회할 수 있습니다 (법 제24조)</li>
           </ul>
         </div>
       </div>

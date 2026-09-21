@@ -175,14 +175,16 @@ GEMINI_TASK_PROMPT.md    # 개선 작업 지시서
 
 ```bash
 python3 scripts/make_docx.py    # build/제안서.docx  (Word · 한글 모두 편집 가능)
-python3 scripts/make_hwpx.py    # build/제안서.hwpx  (한글에서 열어 .hwp 로 저장 가능)
+./scripts/make_pdf.sh           # build/제안서.pdf   (인쇄·제출용)
 ```
 
 **HTML 이 정본입니다.** 내용을 고칠 일이 생기면 `public/doc/index.html` 을 고치고
-위 명령을 다시 돌립니다. docx·hwpx 를 직접 고치면 정본과 어긋납니다.
+위 명령을 다시 돌립니다. docx·pdf 를 직접 고치면 정본과 어긋납니다.
 
 외부 패키지를 쓰지 않습니다(표준 라이브러리 `zipfile` 로 OOXML·OWPML 직접 작성).
-`.hwp` 이진 포맷은 직접 만들지 않습니다 — `.hwpx` 를 한글에서 열어 저장하십시오.
+`.hwpx` 는 만들지 않습니다. 한글에서 편집해야 하면 `.docx` 를 열어 저장하십시오 —
+형식이 둘로 갈리면 어느 쪽이 최신인지 알 수 없게 됩니다.
+PDF 는 정본 HTML 과 같은 엔진(Chrome)으로 뽑아 화면과 쪽 나눔이 일치합니다.
 
 ### 2. Vercel 배포 (권장)
 GitHub 저장소를 Vercel에 연동하면 `public/` 디렉터리(`vercel.json`의 `outputDirectory`)가 전 세계 글로벌 CDN을 통해 정적 웹사이트로 자동 배포됩니다.
